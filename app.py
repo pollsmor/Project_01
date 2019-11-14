@@ -1,7 +1,8 @@
-#Yevgeniy Gorbachev
+#Quaternary Star System
+#Elizabeth Doss, Yevgeniy Gorbachev, Kevin Li, Emory Walsh
 #SoftDev1 pd1
-#K<n> -- <K<n>.__name__>
-#ISO 8601 Date
+#P01 -- ArRESTed Development
+#2019-11-14
 
 from flask import *
 from os import urandom
