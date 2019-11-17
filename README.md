@@ -2,7 +2,7 @@
 
 **Roster/Roles**
 - Elizabeth Doss
-  - PLACEHOLDER
+  - Connect frontend/backend
   - PLACEHOLDER
   - PLACEHOLDER
 - Yevgeniy Gorbachev
