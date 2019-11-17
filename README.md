@@ -20,8 +20,15 @@
   - Styling with Bootstrap
 
 ## Website Description
-This website will (hopefully) provide information and answer questions the visitor may have regarding spacecraft, engines, space travel, exoplanets, etc. A search query is taken in from the user. The website parses the query to see if keywords like **time to reach Proxima Centauri b** exist, then parsing three APIs for information relating to the search, and feeding it back to the user. Searches not containing keywords will error out. 
-
 Data is fetched from the [SpaceX API](https://github.com/r-spacex/SpaceX-API), [Wikipedia API](https://www.mediawiki.org/wiki/API:Main_page), and the [NASA Exoplanet API](https://exoplanetarchive.ipac.caltech.edu/docs/program_interfaces.html).
 
-A list of searched items will be served to the user, who can choose to click on one of them, rendering a dedicated page for that search item with more detailed info. 
+This website will (hopefully) provide information and answer questions the visitor may have regarding spacecraft, engines, space travel, exoplanets, etc. A search query is taken in from the user. The website parses the query for keywords, then parses the three APIs as appropriate for information relating to the search, and feeding it back to the user. Searches not containing keywords will error out. 
+
+The amount of APIs searched through depends on the keywords.
+Something like “how long to reach {{exoplanet}} with SpaceX Falcon 9” will work like this:
+  - Search exoplanets API for the planet
+  - Search Wikipedia API for the engine/rocket
+  - Use the data gathered from the two above APIs to send an equation to Wolfram|Alpha
+  - Return the result.
+  
+Meanwhile, a query like “stat[istic]s for {planet, rocket engine}” will just get a result from the exoplanets API or Wikipedia API respectively. 
