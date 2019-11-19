@@ -1,3 +1,7 @@
+import urllib.request
+from urllib.parse import quote
+import json
+
 class API(object):
     key: str
     url: str
