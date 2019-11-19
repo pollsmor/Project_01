@@ -1,7 +1,7 @@
 # Expected time query format (asterisks represent optional parameters) (case insensitive):
-# [(time|how long)] [to (reach|flyby)]* [from {planet}]* [to {planet}] [using {engine}] [and {fuel mass} of fuel]
+# [(time|how long)] [to (reach|flyby)* {planet}] [from {planet}]* [using {engine}] [and {fuel mass} of fuel]
 # Expected mass query format:
-# [(how much fuel|how much mass)] [to (reach|flyby)]* [from {planet}]* [to {planet}] [using {engine}]
+# [(how much fuel|how much mass)] [to (reach|flyby)* {planet}] [from {planet}]* [using {engine}]
 
 
 import re
@@ -9,14 +9,13 @@ import re
 query_patterns = {
     'time':r'(time|how long)',
     'mass':r'(how much fuel|how much mass)',
-    'approach':r'to (reach|flyby)',
+    'approach':r'to (reach|flyby)? [\-a-z0-9]+',
     'src':r'from [\-a-z0-9]+',
-    'dest':r'to [\-a-z0-9]+',
-    'engine':r'using [\-a-z0-9]+'
+    'engine':r'using [\-a-z0-9]+',
     'fuel':r'and [0-9]*.?[0-9]+ *kg (of )*fuel'
 }
 
-class BadQuery(Error):
+class BadQuery(Exception):
     pass
 
 def parse(query):
@@ -34,9 +33,10 @@ def parse(query):
     src = re.search(query_patterns['src'], query)
     if src:
         tokens['src'] = 'origin present'
-    dest = re.search(query_patterns['src'], query)
+    
+    dest = re.search(query_patterns['approach'], query)
     if dest:
-        tokens['dest'] = 'dest present'
+        tokens['approach'] = 'approach present'
     else:
         raise BadQuery('destination not present')
     
@@ -54,3 +54,15 @@ def parse(query):
             tokens['fuel'] = 'fuel present'
         else:
             raise BadQuery('fuel not present for time query')
+    return tokens
+
+print('Type \"quit\" to quit')
+while True:
+    arg = input('> ')
+    if arg == 'quit':
+        break
+    try:
+        print(parse(arg))
+        print('successfully parsed')
+    except BadQuery as qerror:
+        print(qerror)
