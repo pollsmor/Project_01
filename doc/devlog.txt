@@ -1,3 +1,10 @@
+Quaternary Star System -- Elizabeth Doss, Yevgeniy Gorbachev, Kevin Li, Emory Walsh
+SoftDev pd1
+P01 -- ArRESTed Development
+2019-11-14
+
+Project 1 DEVLOG
+
 dossE -- 2019-11-14 08:41
   - Created devlog and doc folder
 
