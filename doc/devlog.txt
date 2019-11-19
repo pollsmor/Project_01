@@ -1,2 +1,20 @@
 dossE -- 2019-11-14 08:41
-Created devlog and doc folder
+  - Created devlog and doc folder
+
+kevinL -- 2019-11-17 18:07
+  - Added a preliminary site map (that doesn't handle caching yet) [(https://drive.google.com/file/d/1YzE3cxp6siJTyp5_dnnfSQahDnaR2VeN/view?usp=sharing)]
+  - Added roster/role and site description to README
+  
+ kevinL -- 2019-11-17 12:00
+  - Component map ((https://drive.google.com/file/d/1x2LnDXFdfMqUwmi0b7TpfwdbtHSlCLj1/view?usp=sharing)
+  - v1.1 of site map as per Yevgeniy's suggestions
+
+emoryW -- 2019-11-18 17:50
+  - Updates to design doc 
+  - MVP and possible extra features
+  
+yevgeniyG -- 2019-11-18 20:26
+  - design doc updates [
+    - expected query formats
+    - more detailed explanation of API requests
+  ]
