@@ -9,16 +9,11 @@
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-      <title>
-          {% block title %} {% endblock title %}
-      </title>
+        {% block title %} <title>Search Engine</title> {% endblock %}
 
-      {% block head %}
-      {% endlbock head %}
 
     </head>
     <body style="background-color:#7649fe;">
-      <br>
 
       <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#808080;">
 
@@ -31,11 +26,23 @@
 
       <br><br>
 
-      {% block body %}
-      {% endblock body %}
+      {% block content %}
 
-      <br><br><br>
-      <footer style="background-color:#808080; color:white;" class="page-footer font-small">
+        <br><br><br><br>
+
+        <form>
+          <div class="form-group p-3">
+            <label for="query"><h3>Please input your query here.</h3></label>
+            <input type="query" class="form-control" id="query"  placeholder="example query">
+          </div>
+        </form>
+
+        <br><br><br><br>
+
+      {% endblock %}
+
+      <br><br><br><br>
+      <footer style="background-color:#808080; color:white;" class="fixed-bottom page-footer font-small p-2">
         <br>
         <div class="row">
           <div class="col-sm-4">
