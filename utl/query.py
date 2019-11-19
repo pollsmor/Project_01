@@ -1,0 +1,3 @@
+class BadQuery(Error):
+    pass
+
