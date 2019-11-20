@@ -1,18 +1,19 @@
 # Expected time query format (asterisks represent optional parameters) (case insensitive):
 # [(time|how long)] [to (reach|flyby)* {planet}] [from {planet}]* [using {engine}] [and {fuel mass} of fuel]
 # Expected mass query format:
-# [(how much fuel|how much mass)] [to (reach|flyby)* {planet}] [from {planet}]* [using {engine}]
+# [how much (fuel|mass)] [to (reach|flyby)* {planet}] [from {planet}]* [using {engine}] [in {years}]*
 
 
 import re
 
 query_patterns = {
-    'time':r'(time|how long)',
-    'mass':r'(how much fuel|how much mass)',
+    'timeq':r'(time|how long)',
+    'massq':r'how much (fuel|mass)',
     'approach':r'to (reach|flyby)? [\-a-z0-9]+',
     'src':r'from [\-a-z0-9]+',
     'engine':r'using [\-a-z0-9]+',
-    'fuel':r'and [0-9]*.?[0-9]+ *kg (of )*fuel'
+    'fuel':r'and [0-9]*.?[0-9]+ *kg (of )*fuel',
+    'time':r'in [0-9]+ years'
 }
 
 class BadQuery(Exception):
@@ -22,38 +23,49 @@ def parse(query):
     query = query.lower()
     tokens = {}
     # Determine desired information
-    if (re.search(query_patterns['time'], query)): # time taken
-        tokens['type'] = 'time'
-    elif (re.search(query_patterns['time'], query)): # mass ratio
-        tokens['type'] = 'massr'
+    if (re.search(query_patterns['timeq'], query)): # time taken
+        tokens['type'] = 'timeq'
+    elif (re.search(query_patterns['massq'], query)): # mass ratio
+        tokens['type'] = 'massq'
     else:
-        raise BadQuery('infostring not recognized')
+        raise BadQuery('Query error: query not recognized')
 
     # travel information
     src = re.search(query_patterns['src'], query)
     if src:
-        tokens['src'] = 'origin present'
+        tokens['src'] = 'present'
+    else:
+        tokens['src'] = 'earth'
     
     dest = re.search(query_patterns['approach'], query)
     if dest:
-        tokens['approach'] = 'approach present'
+        tokens['approach'] = 'present'
     else:
-        raise BadQuery('destination not present')
+        raise BadQuery('Query error: destination not present')
     
     # engine query
     eng = re.search(query_patterns['engine'], query)
     if eng:
-        tokens['eng'] = 'eng present'
+        tokens['eng'] = 'present'
     else:
-        raise BadQuery('engine not present')
+        raise BadQuery('Query error: engine not present')
 
     # mass query
-    if tokens['type'] == 'time':
+    if tokens['type'] == 'timeq':
         fuel = re.search(query_patterns['fuel'], query)
         if fuel:
-            tokens['fuel'] = 'fuel present'
+            tokens['fuel'] = 'present'
         else:
-            raise BadQuery('fuel not present for time query')
+            raise BadQuery('Query error: fuel not present for time query')
+
+    # time query
+    if tokens['type'] == 'massq':
+        time = re.search(query_patterns['time'], query)
+        if time:
+            tokens['time'] = 'present'
+        else:
+            tokens['time'] = 'minimal'
+    
     return tokens
 
 print('Type \"quit\" to quit')
