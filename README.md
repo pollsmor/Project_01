@@ -2,14 +2,13 @@
 
 **Roster/Roles**
 - Elizabeth Doss
-  - Connect frontend/backend
-  - PLACEHOLDER
-  - PLACEHOLDER
+  - Handle API requests cleanly
 - Yevgeniy Gorbachev
   - Handle the backend
   - Handle caching in database
   - Search through database
   - Generate queries using natural language input
+  - Math
 - Kevin Li
   - Project manager
   - Make changes to repository when necessary
