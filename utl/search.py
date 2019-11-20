@@ -68,13 +68,16 @@ def parse(query):
     
     return tokens
 
-print('Type \"quit\" to quit')
-while True:
-    arg = input('> ')
-    if arg == 'quit':
-        break
-    try:
-        print(parse(arg))
-        print('successfully parsed')
-    except BadQuery as qerror:
-        print(qerror)
+def cons(func):
+    print('Type \"quit\" to quit')
+    while True:
+        arg = input('> ')
+        if arg == 'quit':
+            break
+        try:
+            print(func(arg))
+            print('executed successfuly')
+        except Exception as ex:
+            print(ex)
+            
+cons(parse)
