@@ -49,7 +49,7 @@ python3 -m venv <name_of_venv>
 ```
 *Note that if your system only has Python 3 installed, just remove the 3 from the above command.*
 
-To activate the virtual environment, cd into the directory you created the environment in, and run the "activate" file. Now, you should be able to pip3 install and run Python files that utilize modules installed via pip3. To deactivate the environment, run the "deactivate" file.  
+To activate the virtual environment, cd into the directory you created the environment in, and run the "activate" file. Now, you should be able to pip install the requirements. To deactivate the environment, run the "deactivate" file.  
 
 **Run the program**
 
