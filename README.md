@@ -53,7 +53,7 @@ To activate the virtual environment, cd into the directory you created the envir
 
 **Run the program**
 
-After installing the required depenencies, all you need to do to run the program is to type into a terminal session: 
+After installing the required dependencies, all you need to do to run the program is to type into a terminal session: 
 ```bash
 python3 app.py
 ```
