@@ -1,4 +1,4 @@
-# Space Explorer by Quaternary Star System
+# Shipbuilder's Guide to the Galaxy by Quaternary Star System
 
 **Roster/Roles**
 - Elizabeth Doss
