@@ -36,7 +36,7 @@ Meanwhile, a query like “stat[istic]s for {planet, rocket engine}” will just
 
 **Cloning**
 
-First, procure the ability to run git commands. 
+First, procure the ability to run Git commands. 
 
 - On Windows: Install [Git Bash](https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe).
 
