@@ -3,7 +3,16 @@
 {% block title %} <title>Search Results</title> {% endblock %}
 
 {% block content %}
-  <strong>This is where our results are going to be presented.<br>
-  To fill in this stuff I need to know the format of how results are given to me.<br>
-  This page will get updated soon.<br></strong>
+<br><br><br><br><br><br>
+  <div class="text-center">
+    <h1 style="color:black;" class="text-capitalize">{{ query }}</h1>
+    <strong>This is where our results are going to be presented.<br>
+    To fill in this stuff I need to know the format of how results are given to me.<br>
+    This page will get updated soon.<br></strong>
+  </div>
+  <br><br><br>
+  {% for result in results %}
+
+  {% endfor %}
+
 {% endblock %}
