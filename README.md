@@ -19,7 +19,7 @@
   - Styling with Bootstrap
 
 ## Website Description
-Data is fetched from the [SpaceX API](https://github.com/r-spacex/SpaceX-API), [Wikipedia API](https://www.mediawiki.org/wiki/API:Main_page), and the [NASA Exoplanet API](https://exoplanetarchive.ipac.caltech.edu/docs/program_interfaces.html).
+Data is fetched from the [Wolfram|Alpha API](https://products.wolframalpha.com/api/), [Wikipedia API](https://www.mediawiki.org/wiki/API:Main_page), and the [NASA Exoplanet API](https://exoplanetarchive.ipac.caltech.edu/docs/program_interfaces.html).
 
 This website will (hopefully) provide information and answer questions the visitor may have regarding spacecraft, engines, space travel, exoplanets, etc. A search query is taken in from the user. The website parses the query for keywords, then parses the three APIs as appropriate for information relating to the search, and feeding it back to the user. Searches not containing keywords will error out. 
 
@@ -31,6 +31,14 @@ Something like “how long to reach {{exoplanet}} with SpaceX Falcon 9” will w
   - Return the result.
   
 Meanwhile, a query like “stat[istic]s for {planet, rocket engine}” will just get a result from the exoplanets API or Wikipedia API respectively. 
+
+**Links to the cards of the APIs we used in the API KB**
+
+[Wolfram|Alpha API](https://docs.google.com/document/d/1GLX_8-HKjzI7kHLleQikTbWZ0orXhYVnabveE6T6J8M)
+
+[Wikipedia API](https://docs.google.com/document/d/1KNf_h_Rysiftc88uZNZO4LMpAyQprUTSj-eg5CMz9a8)
+
+[NASA Exoplanet API](https://docs.google.com/document/d/1J5PAzkRvPBrzud4jhXBX3yZZtMhlTx1KmLQezlLszEk)
 
 ## Instructions for running this project
 
