@@ -53,14 +53,14 @@ The project repo should then clone into whatever folder you ran the clone comman
 
 **Dependencies**
 
-You must install the pip3 modules listed in the /doc/requirements.txt file. To do so, install them in a Terminal with:
+You must install the pip modules listed in the /doc/requirements.txt file. To do so, install them in a Terminal with:
 ```bash
 pip install -r <location of requirements.txt file>
 ```
 
 The -r flag is necessary to distinguish it from a typical pip install. Without the -r, pip will look for a package online called "requirements.txt". That is obviously not desirable. 
 
-Note that on certain systems (like the school computers), the pip3 command may be restricted. To get around this, create a virtual environment with:
+Note that on certain systems (like the school computers), the pip command may be restricted. To get around this, create a virtual environment with:
 ```bash
 python3 -m venv <name_of_venv>
 ```
