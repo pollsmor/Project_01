@@ -16,4 +16,9 @@ app.secret_key = urandom(32)
 def index():
     return render_template('_base.html')
 
+@app.route('/results')
+def searchResults():
+    #search.search(query)
+    return render_template('results.html')
+
 app.run(debug=True)
