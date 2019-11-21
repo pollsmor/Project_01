@@ -42,6 +42,23 @@ Meanwhile, a query like “stat[istic]s for {planet, rocket engine}” will just
 
 ## Instructions for running this project
 
+**Cloning**
+
+First, procure the ability to run git commands. 
+
+- On Windows: Install [Git Bash](https://github.com/git-for-windows/git/releases/download/v2.24.0.windows.2/Git-2.24.0.2-64-bit.exe).
+
+- On macOS: Use the [git-osx-installer](https://sourceforge.net/projects/git-osx-installer/files/git-2.23.0-intel-universal-mavericks.dmg/download?use_mirror=autoselect). If you have XCode installed on your machine, you may already have Git functionality. 
+
+- On Linux (preferably an Ubuntu based distribution): you already have Git! 
+
+Now, you can clone this repo. To do so, type into a terminal session:
+```bash
+git clone https://github.com/pollsmor/Project_01.git
+```
+
+The project repo should then clone into whatever folder you ran the clone command in. 
+
 **Dependencies**
 
 You must install the pip3 modules listed in the /doc/requirements.txt file. To do so, install them in a Terminal with:
