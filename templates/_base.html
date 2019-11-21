@@ -30,10 +30,11 @@
 
         <br><br><br><br>
 
-        <form>
+        <form action="/results" method="get"> <!--GET because user security isn't applicable!-->
           <div class="form-group p-3">
             <label for="query"><h3>Please input your query here.</h3></label>
-            <input type="query" class="form-control" id="query"  placeholder="example query">
+            <input type="query" class="form-control" id="query"  placeholder="example query"><br>
+            <button style="background-color:darkgrey;" type="submit" class="btn">Submit</button>
           </div>
         </form>
 
@@ -42,7 +43,7 @@
       {% endblock %}
 
       <br><br><br><br>
-      <footer style="background-color:#808080; color:white;" class="fixed-bottom page-footer font-small p-2">
+      <footer style="background-color:#808080; color:white;" class="font-small p-2">
         <br>
         <div class="row">
           <div class="col-sm-3" style="color:white;">
@@ -53,15 +54,15 @@
           <hr class="clearfix w-80 d-md-none pb-3">
           <div class="col-sm-2">
             <h5 style="color:black;">Wikipedia API</h5>
-            <p><a href="url" style="color:white;">https://en.wikipedia.org/w/api.php</a></p>
+            <p><a href="url" style="color:white;" class="text-wrap">https://en.wikipedia.org/w/api.php</a></p>
           </div>
           <div class="col-sm-3">
             <h5 style="color:black;">NASA API</h5>
-            <p><a href="url" style="color:white;">https://exoplanetarchive.ipac.caltech.edu/docs/program_interfaces.html</a></p>
+            <p><a href="url" style="color:white;" class="text-wrap">https://exoplanetarchive.ipac.caltech.edu/docs/program_interfaces.html</a></p>
           </div>
           <div class="col-sm-2">
             <h5 style="color:black;">Wolphram Alpha API</h5>
-            <p><a href="url" style="color:white;">http://developer.wolframalpha.com/portal/myapps/index.html</a></p>
+            <p><a href="url" style="color:white;" class="text-wrap">http://developer.wolframalpha.com/portal/myapps/index.html</a></p>
           </div>
         </div>
       </footer>
