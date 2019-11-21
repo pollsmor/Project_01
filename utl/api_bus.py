@@ -3,7 +3,7 @@
 
 import urllib.request
 from urllib.parse import quote
-#import json
+import json
 
 class API(object):
     key: str
@@ -28,15 +28,20 @@ class API(object):
 
 #api_bus.wolfram(query: str) -> dict
 #returns a dictionary of title and 
-    def wolfram(query):
-        info = read(query)
-        #throw exception is success != true
+    def wolfram(_query):
+        wolfram_base = "http://api.wolframalpha.com/v2/query?appid='%s'&input='%s'&output=json" % (_key,_query)
+        info = read(_query)
         if info['queryresult']['success'] == True:
-            return 'oh no'
-        return info
+            return info
+        return 'Invalid query'  #will eventually throw an error instead
+
+    def get_value(_query):
+        info = wolfram(_query)
+        return info['queryresult']['pods'][1]['subpods'][0]['plaintext']
+
 
 #have to remove functions from class  
-print(wolfram("http://api.wolframalpha.com/v2/query?appid=P4747E-2545R4KKGK&input=2^4&output=json"))
+#print(wolfram("http://api.wolframalpha.com/v2/query?appid=P4747E-2545R4KKGK&input=2^4&output=json"))
 
 
 ##Things to return
