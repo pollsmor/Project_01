@@ -42,7 +42,7 @@ First, procure the ability to run Git commands.
 
 - On macOS: Use the [git-osx-installer](https://sourceforge.net/projects/git-osx-installer/files/git-2.23.0-intel-universal-mavericks.dmg/download?use_mirror=autoselect). If you have XCode installed on your machine, you may already have Git functionality. 
 
-- On Linux (preferably an Ubuntu based distribution): you already have Git! 
+- On Linux (preferably an Ubuntu based distribution): You already have Git! 
 
 Now, you can clone this repo. To do so, type into a terminal session:
 ```bash
