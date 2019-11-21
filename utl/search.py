@@ -5,6 +5,7 @@
 
 
 import re
+import utl.api_bus
 
 query_patterns = {
     'timeq':r'(time|how long)',
@@ -19,7 +20,13 @@ query_patterns = {
 class BadQuery(Exception):
     pass
 
-def parse(query):
+def search(query: str):
+    query = _parse(query)
+    # results
+    return query # replace with results
+
+
+def _parse(query: str):
     query = query.lower()
     tokens = {}
     # Determine desired information
@@ -77,7 +84,7 @@ def cons(func):
         try:
             print(func(arg))
             print('executed successfuly')
-        except Exception as ex:
+        except BadQuery as ex:
             print(ex)
             
-cons(parse)
+cons(_parse)
