@@ -44,7 +44,11 @@ def wolfram(query):
         return info
     raise QueryFailure('Request to Wolfram\'s API failed')
 
+<<<<<<< HEAD
 def get_equation_result(query):
+=======
+def get_value(query):
+>>>>>>> master
     info = wolfram(query)
     return info['queryresult']['pods'][1]['subpods'][0]['plaintext']
 
