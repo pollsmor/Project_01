@@ -18,8 +18,9 @@ def index():
 
 @app.route('/results', methods=['GET'])
 def searchResults():
-    #results = search.search(query)
     query = request.args['query']
+    results = search.search(query)
+    print(results)
     #a = query[0]
     results = "43598490"
     return render_template('results.html', query = query, results = results)
