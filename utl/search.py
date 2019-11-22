@@ -72,8 +72,3 @@ def _cons(func):
         except BadQuery as ex:
             print(ex)
             
-<<<<<<< HEAD
-
-=======
-_cons(_parse)
->>>>>>> search-dev
