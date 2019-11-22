@@ -9,13 +9,13 @@ import api_bus
 
 # maps query parameters to regular expessions
 query_patterns = {
-    'time':r'(time|how long)',
-    'mass':r'how much (fuel|mass)',
-    'goal':r'to (reach|flyby)? [\-a-z0-9]+',
-    'source':r'from [\-a-z0-9]+',
-    'engine':r'using [\-a-z0-9]+',
-    'fuel':r'and [0-9]*.?[0-9]+ *(kg| kilograms) (of )*fuel',
-    'time':r'in [0-9]+ years'
+    'travel time':re.compile('(time|how long)'),
+    'fuel mass':re.compile('how much (fuel|mass)'),
+    'goal':re.compile('to (reach |flyby |(get|fly) to )?[\-a-z0-9]+'),
+    'source':re.compile('from [\-a-z0-9]+'),
+    'engine':re.compile('using [\-a-z0-9]+'),
+    'fuel':re.compile('and [0-9]*.?[0-9]+ ?(kg| kilograms) (of )?fuel'),
+    'time':re.compile('in [0-9]+ years')
 }
 
 class BadQuery(Exception):
@@ -50,17 +50,20 @@ def _parse(query):
 
     
     # Determine question type
-    if (re.search(query_patterns['time'], query)):
-        params['type'] = 'time'
+    if re.search(query_patterns['travel time'], query):
+        params['type'] = 'travel time'
         set_category(category = 'fuel')
-    elif (re.search(query_patterns['mass'], query)):
-        params['type'] = 'mass'
-        set_category(category = 'time', default = 'minimal')
+    elif re.search(query_patterns['fuel mass'], query):
+        params['type'] = 'fuel mass'
+        set_category(category = 'travel time', default = 'minimal')
     else:
         raise BadQuery('Query error: question type not recognized')
 
-    set_category(category = 'source', default = 'earth')
+    set_category(category = 'source', default = 'from earth')
     set_category(category = 'goal')
+    if not re.search(r'(flyby|reach)', params['goal']):
+        sep = params['goal'].find(' ')
+        params['goal'] = params['goal'][:sep] + ' reach' + params['goal'][sep:]
     set_category(category = 'engine')
     
     return params
