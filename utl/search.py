@@ -60,15 +60,3 @@ def _parse(query: str) -> dict:
     set_category(category = 'engine')
     
     return tokens
-
-def _cons(func):
-    print('Type \"quit\" to quit')
-    while True:
-        arg = input('> ')
-        if arg == 'quit':
-            break
-        try:
-            print(func(arg))
-        except BadQuery as ex:
-            print(ex)
-            
