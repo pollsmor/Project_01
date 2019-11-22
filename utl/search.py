@@ -5,7 +5,7 @@
 
 
 import re
-import utl.api_bus
+import api_bus
 
 # maps query parameters to regular expessions
 query_patterns = {
@@ -21,18 +21,18 @@ query_patterns = {
 class BadQuery(Exception):
     pass
 
-def search(query: str) -> dict:
+def search(query):
     query = _parse(query)
     # -- REPLACE -- # with API requests
     return query # -- REPLACE -- # with results
 
 
-def _parse(query: str) -> dict:
+def _parse(query):
     query = query.lower()
     params = {}
     params['query'] = query
 
-    def substr(match: re.Match, string: str) -> str: # substring using span in Match object
+    def substr(match, string): # substring using span in Match object
         return string[match.span()[0]:match.span()[1]]
 
     def set_category(*args, **kwargs):
