@@ -5,70 +5,63 @@
 
 
 import re
+# import utl.api_bus
 
 query_patterns = {
     'timeq':r'(time|how long)',
     'massq':r'how much (fuel|mass)',
-    'approach':r'to (reach|flyby)? [\-a-z0-9]+',
-    'src':r'from [\-a-z0-9]+',
+    'goal':r'to (reach|flyby)? [\-a-z0-9]+',
+    'source':r'from [\-a-z0-9]+',
     'engine':r'using [\-a-z0-9]+',
-    'fuel':r'and [0-9]*.?[0-9]+ *kg (of )*fuel',
+    'fuel':r'and [0-9]*.?[0-9]+ *(kg| kilograms) (of )*fuel',
     'time':r'in [0-9]+ years'
 }
 
 class BadQuery(Exception):
     pass
 
-def parse(query):
+def search(query: str) -> dict:
+    query = _parse(query)
+    # REPLACE with API requests
+    return query # REPLACE with results
+
+
+def _parse(query: str) -> dict:
     query = query.lower()
     tokens = {}
-    # Determine desired information
-    if (re.search(query_patterns['timeq'], query)): # time taken
+
+    def substr(match: re.Match, string: str) -> str: # substring using span in Match object
+        return string[match.span()[0]:match.span()[1]]
+
+    def set_category(*args, **kwargs):
+        category = kwargs['category']
+        default = kwargs['default'] if ('default' in kwargs) else ''
+
+        match = re.search(query_patterns[category], query)
+        if match:
+            tokens[category] = substr(match, query)
+        elif default != '':
+            tokens[category] = default
+        else:
+            raise BadQuery(f'Query error: {category} not present')
+
+    # Determine question type
+    if (re.search(query_patterns['timeq'], query)):
         tokens['type'] = 'timeq'
-    elif (re.search(query_patterns['massq'], query)): # mass ratio
+        set_category(category = 'fuel')
+    elif (re.search(query_patterns['massq'], query)):
         tokens['type'] = 'massq'
+        set_category(category = 'time', default = 'minimal')
     else:
-        raise BadQuery('Query error: query not recognized')
+        raise BadQuery('Query error: question type not recognized')
 
-    # travel information
-    src = re.search(query_patterns['src'], query)
-    if src:
-        tokens['src'] = 'present'
-    else:
-        tokens['src'] = 'earth'
-    
-    dest = re.search(query_patterns['approach'], query)
-    if dest:
-        tokens['approach'] = 'present'
-    else:
-        raise BadQuery('Query error: destination not present')
-    
-    # engine query
-    eng = re.search(query_patterns['engine'], query)
-    if eng:
-        tokens['eng'] = 'present'
-    else:
-        raise BadQuery('Query error: engine not present')
-
-    # mass query
-    if tokens['type'] == 'timeq':
-        fuel = re.search(query_patterns['fuel'], query)
-        if fuel:
-            tokens['fuel'] = 'present'
-        else:
-            raise BadQuery('Query error: fuel not present for time query')
-
-    # time query
-    if tokens['type'] == 'massq':
-        time = re.search(query_patterns['time'], query)
-        if time:
-            tokens['time'] = 'present'
-        else:
-            tokens['time'] = 'minimal'
+    set_category(category = 'source', default = 'earth')
+    set_category(category = 'goal')
+    set_category(category = 'engine')
     
     return tokens
 
-def cons(func):
+def _cons(func):
     print('Type \"quit\" to quit')
     while True:
         arg = input('> ')
@@ -76,8 +69,11 @@ def cons(func):
             break
         try:
             print(func(arg))
-            print('executed successfuly')
-        except Exception as ex:
+        except BadQuery as ex:
             print(ex)
             
+<<<<<<< HEAD
 
+=======
+_cons(_parse)
+>>>>>>> search-dev
