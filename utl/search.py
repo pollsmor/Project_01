@@ -13,7 +13,7 @@ query_patterns = {
     'goal':r'to (reach|flyby)? [\-a-z0-9]+',
     'source':r'from [\-a-z0-9]+',
     'engine':r'using [\-a-z0-9]+',
-    'fuel':r'and [0-9]*.?[0-9]+ *kg (of )*fuel',
+    'fuel':r'and [0-9]*.?[0-9]+ *(kg| kilograms) (of )*fuel',
     'time':r'in [0-9]+ years'
 }
 
@@ -22,17 +22,16 @@ class BadQuery(Exception):
 
 def search(query: str) -> dict:
     query = _parse(query)
-    # results
-    return query # replace with results
+    # REPLACE with API requests
+    return query # REPLACE with results
 
 
 def _parse(query: str) -> dict:
     query = query.lower()
     tokens = {}
 
-    def substr(match: re.Match, string: str) -> str:
+    def substr(match: re.Match, string: str) -> str: # substring using span in Match object
         return string[match.span()[0]:match.span()[1]]
-        # return match
 
     def set_category(*args, **kwargs):
         category = kwargs['category']
@@ -46,7 +45,7 @@ def _parse(query: str) -> dict:
         else:
             raise BadQuery(f'Query error: {category} not present')
 
-    # Determine desired information
+    # Determine question type
     if (re.search(query_patterns['timeq'], query)):
         tokens['type'] = 'timeq'
         set_category(category = 'fuel')
@@ -54,7 +53,7 @@ def _parse(query: str) -> dict:
         tokens['type'] = 'massq'
         set_category(category = 'time', default = 'minimal')
     else:
-        raise BadQuery('Query error: query not recognized')
+        raise BadQuery('Query error: question type not recognized')
 
     set_category(category = 'source', default = 'earth')
     set_category(category = 'goal')
@@ -62,7 +61,7 @@ def _parse(query: str) -> dict:
     
     return tokens
 
-def cons(func):
+def _cons(func):
     print('Type \"quit\" to quit')
     while True:
         arg = input('> ')
@@ -70,8 +69,7 @@ def cons(func):
             break
         try:
             print(func(arg))
-            print('executed successfuly')
         except BadQuery as ex:
             print(ex)
             
-cons(_parse)
+_cons(_parse)
