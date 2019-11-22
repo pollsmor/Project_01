@@ -31,8 +31,6 @@ def get_json(url):
     info = json.loads(response)
     return info
 
-
-
 #-----------------------Wolfram Alpha Functions---------------------------
 
 #api_bus.wolfram(query: str) -> dict
@@ -44,13 +42,17 @@ def wolfram(query):
         return info
     raise QueryFailure('Request to Wolfram\'s API failed')
 
-<<<<<<< HEAD
 def get_equation_result(query):
-=======
-def get_value(query):
->>>>>>> master
     info = wolfram(query)
     return info['queryresult']['pods'][1]['subpods'][0]['plaintext']
+
+#-----------------------Wikipedia Functions---------------------------
+def wiki(query):
+    url = WIKIPEDIA.get_url(query)
+    info = get_json(url)
+    if info['queryresult']['success'] == True:
+        return info
+    raise QueryFailure('Request to Wolfram\'s API failed')
 
 
 #have to remove functions from class  
@@ -61,6 +63,6 @@ def get_value(query):
 #plaintext
 #dist, ra, rec, interesting things
 #search, return first result that is a rocket (dw about this yet)
-
+#wiki: thrust, /sp(vac.), /sp(SL), dry weight
 
 
