@@ -21,7 +21,7 @@
           <strong>Shipbuilder's Guide to the Galaxy</strong>
         </a>
         <a href=../static/help.html target="_blank"><input type="button" value="Help/FAQ"></a>
-        <a href=../static/explanation.html target="_blank"><input type="button" value="Explanation"></a>
+        <a href=../static/explanation.html target="_blank"><input type="button" class="m-3" value="Explanation"></a>
       </nav>
 
       <br><br>
@@ -30,10 +30,12 @@
 
         <br><br><br><br>
 
+        <h1 style="color:white;" class="p-2">{{ message }}</h1><br>
+
         <form action="/results" method="GET"> <!--GET because user security isn't applicable!-->
           <div class="form-group p-3">
             <label for="query"><h3>Please input your query here.</h3></label>
-            <input type="text" name="query" class="form-control" id="query"  placeholder="example query"><br>
+            <input type="text" required="required" name="query" class="form-control" id="query"  placeholder="example query"><br>
             <button style="background-color:darkgrey;" type="submit" class="btn">Submit</button>
           </div>
         </form>
