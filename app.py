@@ -15,7 +15,6 @@ app.secret_key = urandom(32)
 @app.route('/')
 def index():
     message = get_flashed_messages()
-    print(message)
     if message:
         return render_template('_base.html', message = message[0])
     return render_template('_base.html')
@@ -29,8 +28,6 @@ def searchResults():
     except search.BadQuery:
         flash("Bad query. Please try again.");
         return redirect(url_for('index'))
-    #a = query[0]
-    results = "43598490"
     return render_template('results.html', query = query, results = results)
 
 app.run(debug=True)
