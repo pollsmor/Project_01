@@ -17,28 +17,30 @@
 
       <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#808080;">
 
-        <a class="navbar-brand" style="color:white;" href="#">
-          <img scr="https://cdn.dribbble.com/users/2411363/screenshots/6620799/dribbb.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+        <a class="navbar-brand" style="color:white;" href="../">
           <strong>Shipbuilder's Guide to the Galaxy</strong>
         </a>
         <a href=../static/help.html target="_blank"><input type="button" value="Help/FAQ"></a>
+        <a href=../static/explanation.html target="_blank"><input type="button" class="m-3" value="Explanation"></a>
       </nav>
 
       <br><br>
 
       {% block content %}
 
-        <br><br><br><br>
+        <br><br><br>
 
-        <form action="/results" method="get"> <!--GET because user security isn't applicable!-->
+        <h1 style="color:white;" class="p-2">{{ message }}</h1><br>
+
+        <form action="/results" method="GET"> <!--GET because user security isn't applicable!-->
           <div class="form-group p-3">
             <label for="query"><h3>Please input your query here.</h3></label>
-            <input type="query" class="form-control" id="query"  placeholder="example query"><br>
+            <input type="text" required="required" name="query" class="form-control" id="query"  placeholder="how much fuel to reach kepler-10c using merlin 1d in 20 years"><br>
             <button style="background-color:darkgrey;" type="submit" class="btn">Submit</button>
           </div>
         </form>
 
-        <br><br><br><br>
+        <br><br><br>
 
       {% endblock %}
 
@@ -46,23 +48,16 @@
       <footer style="background-color:#808080; color:white;" class="font-small p-2">
         <br>
         <div class="row">
-          <div class="col-sm-3" style="color:white;">
-            <h5 style="color:black;">Shipbuilder's Guide to the Galaxy</h5>
+          <div class="col-sm-5" style="color:white;">
+            <h5>Shipbuilder's Guide to the Galaxy</h5>
             <p class="footer-copyright">@ Copyright 2019</p>
             <p>Powered by Quarternary Star System</p>
           </div>
           <hr class="clearfix w-80 d-md-none pb-3">
-          <div class="col-sm-2">
-            <h5 style="color:black;">Wikipedia API</h5>
-            <p><a href="url" style="color:white;" class="text-wrap">https://en.wikipedia.org/w/api.php</a></p>
-          </div>
-          <div class="col-sm-3">
-            <h5 style="color:black;">NASA API</h5>
-            <p><a href="url" style="color:white;" class="text-wrap">https://exoplanetarchive.ipac.caltech.edu/docs/program_interfaces.html</a></p>
-          </div>
-          <div class="col-sm-2">
-            <h5 style="color:black;">Wolphram Alpha API</h5>
-            <p><a href="url" style="color:white;" class="text-wrap">http://developer.wolframalpha.com/portal/myapps/index.html</a></p>
+          <div class="col-sm-5">
+            <h5><a href="https://docs.google.com/document/d/1KNf_h_Rysiftc88uZNZO4LMpAyQprUTSj-eg5CMz9a8/edit" style="color:black;">Wipedia API</a></h5>
+            <h5><a href="https://docs.google.com/document/d/1J5PAzkRvPBrzud4jhXBX3yZZtMhlTx1KmLQezlLszEk/edit" style="color:black;">NASA API</a></h5>
+            <h5><a href="https://docs.google.com/document/d/1GLX_8-HKjzI7kHLleQikTbWZ0orXhYVnabveE6T6J8M/edit" style="color:black;">Wolphram Alpha API</a></h5>
           </div>
         </div>
       </footer>

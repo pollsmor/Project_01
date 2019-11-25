@@ -77,6 +77,7 @@ def _parse(query):
     set_category(category = 'method', default = 'reach')
     set_category(category = 'engine')
 
+<<<<<<< HEAD
 
     
     return params
@@ -90,3 +91,6 @@ def _parse(query):
 
 # for item in test_queries:
 #     print(_parse(item))
+=======
+    return tokens
+>>>>>>> 1cf3de491bbed80b17a44d6fd01c31c3e6966200

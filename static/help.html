@@ -12,32 +12,56 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
 
-
-
   <body style="background-color:#7649fe; color:white;">
-    <h1 class="text-center text-uppercase" style="background-color:#808080; color:white;"><br>How to use this website<br><br></h1>
+    <h1 class="text-center text-uppercase" style="background-color:#808080; color:white;"><br>How to use this website / FAQ<br><br></h1>
+    <div class="p-2">
+      <h4><strong>What is the purpose of this website?</strong></h4>
+      <p>
+        This website will (hopefully) provide information and answer questions the
+      visitor may have regarding spacecraft, engines, space travel, exoplanets,
+      etc.
+      </p>
+      <h4><strong>How does the search feature work?</strong></h4>
+      <p>
+        A search query is taken in from the user. The website parses the query
+        for keywords, then parses the three APIs listed at the bottom of this page
+        as appropriate for information relating to the search, and
+        feeding it back to the user.
+      </p>
+      <h4><strong>What if no keywords are found?</strong></h4>
+      <p>Searches not containing keywords will error out.</p>
 
-    <br><br><br>
-    <footer style="background-color:#808080;" class="font-small p-2">
+      <h4><strong>What are some examples of search queries?</strong></h4>
+      <p>
+        The amount of APIs searched through depends on the keywords. Something like
+        “how long to reach {{exoplanet}} with SpaceX Falcon 9” will work like this:
+      </p>
+
+      <ul>
+        <li>Search exoplanets API for the planet</li>
+        <li>Search Wikipedia API for the engine/rocket</li>
+        <li>Use the data gathered from the two above APIs to send an equation to Wolfram|Alpha</li>
+        <li>Return the result.</li>
+      </ul>
+      <p>
+        Meanwhile, a query like “stat[istic]s for {planet, rocket engine}” will
+        just get a result from the exoplanets API or Wikipedia API respectively.
+      </p>
+      <h4 class="font-italic font-weight-bold">Have fun! This is very much a "try things out and see what happens" website.</h4>
+    </div>
+    <footer style="background-color:#808080; color:white;" class="font-small p-2">
       <br>
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-5" style="color:white;">
           <h5>Shipbuilder's Guide to the Galaxy</h5>
           <p class="footer-copyright">@ Copyright 2019</p>
           <p>Powered by Quarternary Star System</p>
         </div>
         <hr class="clearfix w-80 d-md-none pb-3">
-        <div class="col-sm-2">
-          <h5>Wikipedia API</h5>
-          <p>link</p>
-        </div>
-        <div class="col-sm-2">
-          <h5>NASA API</h5>
-          <p>link</p>
-        </div>
-        <div class="col-sm-2">
-          <h5>Wolphram Alpha API</h5>
-          <p>link</p>
+        <div class="col-sm-5">
+          <h5><a href="https://docs.google.com/document/d/1KNf_h_Rysiftc88uZNZO4LMpAyQprUTSj-eg5CMz9a8/edit" style="color:black;">Wikipedia API</a></h5>
+          <h5><a href="https://docs.google.com/document/d/1J5PAzkRvPBrzud4jhXBX3yZZtMhlTx1KmLQezlLszEk/edit" style="color:black;">NASA Exoplanets API</a></h5>
+          <h5><a href="https://docs.google.com/document/d/1GLX_8-HKjzI7kHLleQikTbWZ0orXhYVnabveE6T6J8M/edit" style="color:black;">Wolfram|Alpha API</a></h5>
         </div>
       </div>
     </footer>
