@@ -6,19 +6,24 @@ __dbfile__ = 'data/cache.db'
     
 def store(results):
     if results['type'] == 'travel time':
-        _insert(table='timeqs', values=(results['source']['name'], results['source']['name'], results['engine']['name'], results['fuel'], results['time']))
+        _insert(table='timeqs', values=results['results'])
     elif results['type'] == 'fuel mass':
-        _insert(table='massqs', values=(results['source']['name'], results['source']['name'], results['engine']['name'], results['time'], results['fuel']))
-    _insert(table='engines', values=(results['source']))
-    _insert(table='planets', values=())
+        _insert(table='massqs', values=results['results'])
+    
+    _insert(table='engines', values=results['engine'])
+    _insert(table='planets', values=results['origin'])
+    _insert(table='planets', values=results['destination'])
 
 def _insert(*args, **kwargs):
     table = kwargs['table']
-    data = kwargs['data'].items()
-    cols = '(' + ','.join([item[0] for item in data]) + ')'
-    argfs = '(' + ','.join([str(item[1]) for item in data]) + ')'
+    values = kwargs['values'].items()
+
+    # forms an ordering between columns and values
+    # removes necessity for correctly ordering entries in values
+    cols = '(' + ','.join([item[0] for item in values]) + ')'
+    argfs = '(' + ','.join([str(item[1]) for item in values]) + ')'
 
     db = sqlite3.connect(__dbfile__)
-    db.execute('insert into %s %s values %s' % (table, cols, argfs))
+    db.execute('insert or ignore into %s %s values %s' % (table, cols, argfs))
     db.commit()
     db.close()
