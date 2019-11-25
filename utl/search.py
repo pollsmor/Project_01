@@ -14,7 +14,7 @@ query_patterns = {
     'destination':re.compile('to (reach |flyby |(get|fly) to )?[\-a-z0-9]+'),
     'method':re.compile('to (reach |flyby |(get|fly) to )'),
     'source':re.compile('from [\-a-z0-9]+'),
-    'engine':re.compile('using [\-a-z0-9]+'),
+    'engine':re.compile('using (merlin |rocketdyne |bmw |S[0-9]\.)?[\-a-z0-9]+'),
     'fuel':re.compile('and [0-9]*.?[0-9]+ ?(kg| kilograms) (of )?fuel'),
     'time':re.compile('in [0-9]+ years')
 }
