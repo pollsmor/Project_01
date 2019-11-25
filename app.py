@@ -14,6 +14,8 @@ app.secret_key = urandom(32)
 
 @app.route('/')
 def index():
+    wikipedia("Merlin 1C")
+
     message = get_flashed_messages()
     if message:
         return render_template('_base.html', message = message[0])
