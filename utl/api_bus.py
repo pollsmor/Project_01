@@ -20,13 +20,14 @@ class API(object):
         query = quote(query)
         return self.url.format(_key = self.key, query = query)
 
-WOLFRAM = API('P4747E-2545R4KKGK','http://api.wolframalpha.com/v2/query?appid={_key}&input={_query}&output=json')
-WIKIPEDIA = API('REPLACE WITH KEY','REPLACE WITH URL')
+WOLFRAM = API('P4747E-2545R4KKGK','http://api.wolframalpha.com/v2/query?appid={_key}&input={query}&output=json')
+WIKIPEDIA_SEARCH = API('','https://en.wikipedia.org/w/api.php?action=query&format=json&prop=categories&list=search&continue=-||categories&srsearch={query}&sroffset=0')
+WIKIPEDIA = API('','https://en.wikipedia.org/w/api.php?action=parse&format=json&pageid={query}')
 EXOPLANETS = API('REPLACE WITH KEY','REPLACE WITH URL')
-
-#opens and reads the url query provided, url is a string
+    
+    #opens and reads the url query provided, url is a string
 def get_json(url):
-    u = urllib.requesturlopen(url)
+    u = urllib.request.urlopen(url)
     response = u.read()
     info = json.loads(response)
     return info
@@ -34,7 +35,7 @@ def get_json(url):
 #-----------------------Wolfram Alpha Functions---------------------------
 
 #api_bus.wolfram(query: str) -> dict
-#returns a dictionary of title and 
+#this is not explicitly called, only get_equation_result is
 def wolfram(query):
     url = WOLFRAM.get_url(query)
     info = get_json(url)
@@ -48,11 +49,21 @@ def get_equation_result(query):
 
 #-----------------------Wikipedia Functions---------------------------
 def wiki(query):
+    url = WIKIPEDIA_SEARCH.get_url(query)
+    info = get_json(url)
+    pageID = info['query']['search'][0]['pageid']
+    return pageID
+
+def go_to_page(query):
     url = WIKIPEDIA.get_url(query)
     info = get_json(url)
-    if info['queryresult']['success'] == True:
-        return info
-    raise QueryFailure('Request to Wolfram\'s API failed')
+    pageID = wiki(query)
+    return 'return from text'
+    
+    
+    #raise QueryFailure('Request to Wolfram\'s API failed')
+
+print(wiki("dog"))
 
 
 #have to remove functions from class  
