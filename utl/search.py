@@ -77,20 +77,13 @@ def _parse(query):
     set_category(category = 'method', default = 'reach')
     set_category(category = 'engine')
 
-<<<<<<< HEAD
 
     
     return params
 
 
-# test_queries = [
-#     "how long to reach kepler-10c using merlin 1d and 1000kg of fuel",
-#     "how long to get to kepler-10d using RS-25 and 1000.2kg of fuel",
-#     "how much fuel to flyby kepler-10d using RS-25 in 10 years"
-# ]
-
-# for item in test_queries:
-#     print(_parse(item))
-=======
-    return tokens
->>>>>>> 1cf3de491bbed80b17a44d6fd01c31c3e6966200
+test_queries = [
+    "how long to reach kepler-10c using merlin 1d and 1000kg of fuel",
+    "how long to get to kepler-10d using RS-25 and 1000.2kg of fuel",
+    "how much fuel to flyby kepler-10d using RS-25 in 10 years"
+]

@@ -13,13 +13,12 @@ def store(results):
     _insert(table='planets', values=())
 
 def _insert(*args, **kwargs):
-    db = sqlite3.connect(__dbfile__)
-
     table = kwargs['table']
-    cols = "("
-    contents = kwargs['values']
-    argfs = ('?,' * len(contents))[:-1]
+    data = kwargs['data'].items()
+    cols = '(' + ','.join([item[0] for item in data]) + ')'
+    argfs = '(' + ','.join([str(item[1]) for item in data]) + ')'
 
-    db.execute(f'insert into {table} values ({argfs});', contents)
+    db = sqlite3.connect(__dbfile__)
+    db.execute('insert into %s %s values %s' % (table, cols, argfs))
     db.commit()
     db.close()
