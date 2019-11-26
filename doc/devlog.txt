@@ -46,12 +46,12 @@ yevgeniyG --2019-11-20 14:11
 kevinL -- 2019-11-20 18:30
   - Added run instructions for the project
 
-walshE -- 2019-11-20 19:30
+emoryW -- 2019-11-20 19:30
   - added submit button that when pressed goes to /results (currently /results is nonexistent)
   - changed footer so it sticks to end of page
   - can't figure out how to make urls in footer wrap, need to come back to this
   
-dossE -- 2019-11-20 20:42
+elizabethD -- 2019-11-20 20:42
 The reading focused on the dangers of having an ego while programming and how to work with others in order to work quicker and more efficiently. Many programmers are detached from real people when they work, but the key to success is working as a team to debug and fix problems!
 
 To be more awesome we will:
@@ -80,3 +80,42 @@ emoryW -- 2019-11-21 17:33
 yevgeniyG -- 2019-11-21 20:19
   - rewrote search._parse with kwargs
   - _parse returns substrings
+
+emoryW -- 2019-11-22 08:39
+  - Added route where we'll explain our calculations
+  - Started integrating search
+  - If a bad query is given it now redirects back to search page
+
+kevinL -- 2019-11-23 14:12
+  - Added content to help/FAQ page
+
+emoryW -- 2019-11-23 14:34
+  - If given a bad query it now flashes an error message
+
+emoryW -- 2019-11-25 08:46
+  - Changed placeholder query to a real example
+  - Formatted help page text
+
+yevgeniyG -- 2019-11-25 10:10
+  - fixed utl.search python 3.6 compatibility
+  - updated naming, dict specs, table specs
+
+HOME STRETCH PLAN -- 2019-11-25 19:00
+Estimated date of completion: 2019-12-02
+----TODO----
+  - Create functions that can fetch the appropriate data from the:
+    - Wikipedia API [Elizabeth, 2019-11-28]
+    - NASA Exoplanet API (need to rely on timing out) [Elizabeth, Kevin, 2019-11-29]
+    - Wolfram|Alpha API [Elizabeth, Kevin, 2019-11-29]
+  - Cache the necessary data [Yevgeniy, 2019-11-30]
+  - Derive the equations to send to Wolfram|Alpha [Yevgeniy, 2019-11-30]
+  - Use the fetch functions to display data on the HTML [Emory, 2019-11-30]
+
+----EXTRAS----
+  - Registration/login feature
+  - User profiles that can save specific pages/search results to favorites
+  - Provide information that the user may be interested in based on their previous searches
+  
+elizabethD -- 2019-11-25 20:29
+  - Fixed error in get_url
+  - Implemented wiki functions, pulls data from rocket wikis

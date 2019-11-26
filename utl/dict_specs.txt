@@ -1,0 +1,42 @@
+search._parse: str -> dict
+    dict = {
+        "type":"travel time"|"fuel mass"
+        "fuel": $(fuel quantity)? (IF type="travel time")
+        "time": $(time) (IF type="fuel mass")
+        "origin": $(origin planet name)?
+        "destination": $(destination planet name)
+        "method": $(method)?
+        "engine": $(engine name)
+    }
+
+cache.store: dict
+    dict = {
+        "type":"travel time"|"fuel mass"
+        "results": {
+            "origin": $(origin planet name)
+            "method": $(method)
+            "destination": $(destination planet name)
+            "fuel": $(fuel quantity)
+            "time": $(time)
+        }
+        "origin": {
+            "name": $(origin planet name)
+            "distance": $(distance)
+            "ra": $(right ascension)
+            "dec": $(declination)
+            (...)
+        }
+        "destination": {
+            "name": $(planet name)
+            "dist": $(distance)
+            "ra": $(right ascension)
+            "dec": $(declination)
+            (...)
+        }
+        "engine": {
+            "name": $(engine name)
+            "thrust": $(vacuum thrust)
+            "isp": $(specific impulse)
+            "mass": $(engine mass)
+        }
+    }
