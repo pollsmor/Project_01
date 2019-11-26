@@ -24,6 +24,7 @@ def searchResults():
     query = request.args['query']
     try:
         results = search.search(query)
+        print(results)
     except search.BadQuery:
         flash("Bad query. Please try again.")
         return redirect(url_for('index'))
