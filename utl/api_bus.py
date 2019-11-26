@@ -76,11 +76,11 @@ def exoplanets(query):
         return;
 
     result = info[0]
-    ra = result['ra']
-    dec = result['dec']
-    dist = result['st_dist'] #in parsecs
 
-    output = [ra, dec, dist]
+    output = {}
+    output['ra'] = result['ra']
+    output['dec'] = result['dec']
+    output['distance'] = result['st_dist'] #in parsecs
     print(output)
     return output
 
