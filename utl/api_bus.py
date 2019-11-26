@@ -15,7 +15,7 @@ class API(object):
         self.key = key
         self.url = url
 
-    #given a string query, returns the api request url as a string  
+    #given a string query, returns the api request url as a string
     def get_url(self, query="") -> str:
         query = quote(query)
         return self.url.format(_key = self.key, query = query)
@@ -23,8 +23,8 @@ class API(object):
 WOLFRAM = API('P4747E-2545R4KKGK','http://api.wolframalpha.com/v2/query?appid={_key}&input={query}&output=json')
 WIKIPEDIA_SEARCH = API('','https://en.wikipedia.org/w/api.php?action=query&format=json&prop=categories&list=search&continue=-||categories&srsearch={query}&sroffset=0')
 WIKIPEDIA = API('','https://en.wikipedia.org/w/api.php?action=parse&format=json&pageid={query}')
-EXOPLANETS = API('REPLACE WITH KEY','REPLACE WITH URL')
-    
+EXOPLANETS = API('','https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI?table=exoplanets&format=json&where=pl_name%20like%20%27{query}%25%27')
+
     #opens and reads the url query provided, url is a string
 def get_json(url):
     u = urllib.request.urlopen(url)
@@ -59,14 +59,21 @@ def go_to_page(query):
     info = get_json(url)
     pageID = wiki(query)
     return 'return from text'
-    
-    
+
+
     #raise QueryFailure('Request to Wolfram\'s API failed')
 
-print(wiki("dog"))
+#print(wiki("dog"))
 
+#-----------------------Exoplanets Functions---------------------------
+def exoplanets(query):
+    url = EXOPLANETS.get_url(query)
+    info = get_json(url)
 
-#have to remove functions from class  
+    print(url)
+    print(info)
+
+#have to remove functions from class
 #print(wolfram("http://api.wolframalpha.com/v2/query?appid=P4747E-2545R4KKGK&input=2^4&output=json"))
 
 
@@ -75,5 +82,3 @@ print(wiki("dog"))
 #dist, ra, rec, interesting things
 #search, return first result that is a rocket (dw about this yet)
 #wiki: thrust, /sp(vac.), /sp(SL), dry weight
-
-
