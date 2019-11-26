@@ -5,7 +5,7 @@
 
 
 import re
-import api_bus
+import utl.api_bus
 
 # maps query parameters to regular expessions
 query_patterns = {
