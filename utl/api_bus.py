@@ -68,10 +68,21 @@ def go_to_page(query):
 #-----------------------Exoplanets Functions---------------------------
 def exoplanets(query):
     url = EXOPLANETS.get_url(query)
+    print(url)
     info = get_json(url)
 
-    print(url)
-    print(info)
+    if (len(info) <= 0): #no search results found
+        print("No search results found.")
+        return;
+
+    result = info[0]
+    ra = result['ra']
+    dec = result['dec']
+    dist = result['st_dist'] #in parsecs
+
+    output = [ra, dec, dist]
+    print(output)
+    return output
 
 #have to remove functions from class
 #print(wolfram("http://api.wolframalpha.com/v2/query?appid=P4747E-2545R4KKGK&input=2^4&output=json"))
