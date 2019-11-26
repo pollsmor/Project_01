@@ -23,8 +23,9 @@ class API(object):
 WOLFRAM = API('P4747E-2545R4KKGK','http://api.wolframalpha.com/v2/query?appid={_key}&input={query}&output=json')
 WIKIPEDIA_SEARCH = API('','https://en.wikipedia.org/w/api.php?action=query&format=json&prop=categories&list=search&continue=-||categories&srsearch={query}&sroffset=0')
 WIKIPEDIA = API('','https://en.wikipedia.org/w/api.php?action=parse&format=json&pageid={query}')
-EXOPLANETS = API('','https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI?table=exoplanets&format=json&where=pl_name%20like%20%27{query}%25%27')
+WIKIPEDIA_PAGE_INFO = API('','https://en.wikipedia.org/w/api.php?action=parse&format=json&pageid={query}')
 
+EXOPLANETS = API('','https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI?table=exoplanets&format=json&where=pl_name%20like%20%27{query}%25%27')
     #opens and reads the url query provided, url is a string
 def get_json(url):
     u = urllib.request.urlopen(url)
@@ -55,15 +56,59 @@ def wiki(query):
     return pageID
 
 def go_to_page(query):
-    url = WIKIPEDIA.get_url(query)
+    pageID = str(wiki(query))
+    url = WIKIPEDIA_PAGE_INFO.get_url(pageID)
     info = get_json(url)
-    pageID = wiki(query)
-    return 'return from text'
+    return info
+
+#returns thrustVac, spVac, spSL, and dryW
+def get_wiki_info(query):
+    info = go_to_page(query)
+    info = info['parse']['text']['*']                #all content of the wiki page (html)
+    imp_info = {}
 
 
-    #raise QueryFailure('Request to Wolfram\'s API failed')
+    ##Thrust (vac.) found in infobox
+    thrustVac = info.find("Thrust (vac.)") + 22
+    thrustVac_str = info[thrustVac:thrustVac+30]     #add arbitrary large number for dif sig figs
+    if '&' in thrustVac_str:
+        thrustVac_str = thrustVac_str.partition('&')[0]
+    imp_info['thrustVac'] = thrustVac_str
 
-#print(wiki("dog"))
+
+    ## /sp (vac.) found in infobox
+    spVac = -1
+    for i in range(0, 2):
+        spVac = info.find('(vac.)', spVac + 1)
+    spVac += 15
+    spVac_str = info[spVac:spVac+20]                  #add arbitrary large number for dif sig figs
+    if '&' in spVac_str or ' ' in spVac_str:
+        spVac_str = str(spVac_str.partition('&')[0])
+        spVac_str = spVac_str.partition(' ')[0]
+    imp_info['spVac'] = spVac_str
+
+
+    ## /sp (SL) found in infobox
+    spSL = -1
+    for i in range(0, 2):
+        spSL = info.find('(SL)', spSL + 1)
+    spSL += 13
+    spSL_str = info[spSL:spSL+20]                  #add arbitrary large number for dif sig figs
+    if '&' in spSL_str or ' ' in spSL_str:
+        spSL_str = str(spSL_str.partition('&')[0])
+        spSL_str = spSL_str.partition(' ')[0]
+    imp_info['spSL'] = spSL_str
+
+
+    ##Dry Weight found in infobox
+    dry = info.find("Dry weight") + 19
+    dry_str = info[dry:dry+30]     #add arbitrary large number for dif sig figs
+    if ' ' in dry_str:
+        dry_str = dry_str.partition(' ')[0]
+    imp_info['dryW'] = dry_str
+
+
+    return imp_info
 
 #-----------------------Exoplanets Functions---------------------------
 def exoplanets(query):
@@ -73,7 +118,6 @@ def exoplanets(query):
 
     if (len(info) <= 0): #no search results found
         print("No search results found.")
-        return;
 
     result = info[0]
 
@@ -88,9 +132,12 @@ def exoplanets(query):
 #have to remove functions from class
 #print(wolfram("http://api.wolframalpha.com/v2/query?appid=P4747E-2545R4KKGK&input=2^4&output=json"))
 
+##Tests
+print(get_wiki_info("merlin rocket"))
+print(get_wiki_info("Rocketdyne F-1"))
+print(get_wiki_info("RS-25"))
 
 ##Things to return
-#plaintext
-#dist, ra, rec, interesting things
-#search, return first result that is a rocket (dw about this yet)
+#wolfram: equation result
+#nasa: dist, ra, rec, interesting things
 #wiki: thrust, /sp(vac.), /sp(SL), dry weight

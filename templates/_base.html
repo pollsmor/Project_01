@@ -28,19 +28,19 @@
 
       {% block content %}
 
-        <br><br><br><br>
+        <br><br><br>
 
         <h1 style="color:white;" class="p-2">{{ message }}</h1><br>
 
         <form action="/results" method="GET"> <!--GET because user security isn't applicable!-->
           <div class="form-group p-3">
             <label for="query"><h3>Please input your query here.</h3></label>
-            <input type="text" required="required" name="query" class="form-control" id="query"  placeholder="example query"><br>
+            <input type="text" required="required" name="query" class="form-control" id="query"  placeholder="how much fuel to reach kepler-10c using merlin 1d in 20 years"><br>
             <button style="background-color:darkgrey;" type="submit" class="btn">Submit</button>
           </div>
         </form>
 
-        <br><br><br><br>
+        <br><br><br>
 
       {% endblock %}
 
