@@ -7,6 +7,7 @@
 import re
 # import utl.api_bus
 
+# maps query parameters to regular expessions
 query_patterns = {
     'timeq':r'(time|how long)',
     'massq':r'how much (fuel|mass)',
@@ -58,5 +59,5 @@ def _parse(query: str) -> dict:
     set_category(category = 'source', default = 'earth')
     set_category(category = 'goal')
     set_category(category = 'engine')
-    
+
     return tokens
