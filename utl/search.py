@@ -13,28 +13,36 @@ rocket_pattern = '(Merlin |Rocketdyne |BMW |S[0-9]\.)?[\-a-zA-Z0-9]+'
 
 # maps query parameters to regular expessions
 query_patterns = {
-    'travel time':re.compile('(time|how long)', re.IGNORECASE),
-    'fuel mass':re.compile('how much (fuel|mass)', re.IGNORECASE),
-    'destination':re.compile('to (reach |flyby |(get|fly) to )?%s' % planet_pattern, re.IGNORECASE),
-    'method':re.compile('to (reach|flyby|(get|fly) to)', re.IGNORECASE),
-    'origin':re.compile('from %s' % planet_pattern, re.IGNORECASE),
-    'engine':re.compile('(using|with) %s' % rocket_pattern, re.IGNORECASE),
-    'fuel':re.compile('(and|using) [0-9]*.?[0-9]+ ?(kg| kilograms) (of )?fuel', re.IGNORECASE),
-    'time':re.compile('in [0-9]+ years', re.IGNORECASE)
+    'travel time':re.compile('(time|how long)',
+        re.IGNORECASE),
+    'fuel mass':re.compile('how much (fuel|mass)',
+        re.IGNORECASE),
+    'destination':re.compile('to (reach |flyby |(get|fly) to )?%s' % planet_pattern,
+        re.IGNORECASE),
+    'method':re.compile('to (reach|flyby|(get|fly) to)', 
+        re.IGNORECASE),
+    'origin':re.compile('from %s' % planet_pattern, 
+        re.IGNORECASE),
+    'engine':re.compile('(using|with) %s' % rocket_pattern, 
+        re.IGNORECASE),
+    'fuel':re.compile('(and|using) [0-9]*.?[0-9]+ tons of fuel',
+        re.IGNORECASE),
+    'time':re.compile('in [0-9]+ years',
+        re.IGNORECASE)
 }
 #reduces a query parameter to raw content using the regular expression and the given function
 reduction_patterns = {
     'method':(re.compile('(reach|flyby|(get|fly) to)$'), 
         lambda s: s if s == "flyby" else "reach"),
-    'destination':(re.compile('( %s)$' % planet_pattern, re.IGNORECASE), 
+    'destination':(re.compile('( %s)$' % planet_pattern, re.IGNORECASE),
         lambda s: s[1:-1]),
-    'origin':(re.compile('( %s)$' % planet_pattern, re.IGNORECASE), 
+    'origin':(re.compile('( %s)$' % planet_pattern, re.IGNORECASE),
         lambda s: s[1:-1]),
-    'engine':(re.compile('( %s)$' % rocket_pattern, re.IGNORECASE), 
+    'engine':(re.compile('( %s)$' % rocket_pattern, re.IGNORECASE),
         lambda s: s[1:]),
-    'fuel':(re.compile('[0-9]*.?[0-9]+'), 
-        lambda f: float(f)),
-    'time':(re.compile('[0-9]+'), 
+    'fuel':(re.compile('[0-9]*.?[0-9]+'),
+        lambda f: float(f) * 1000),
+    'time':(re.compile('[0-9]+'),
         lambda i: int(i))
 }
 
@@ -106,8 +114,8 @@ test_queries = [
     "how long to reach kepler-10 from kepler-11 using merlin 1d and 10kg of fuel"
 ]
 
-for query in test_queries:
-    try:
-        dict_print(search(query))
-    except BadQuery as badness:
-        print(badness)
+# for query in test_queries:
+#     try:
+#         dict_print(search(query))
+#     except BadQuery as badness:
+#         print(badness)
