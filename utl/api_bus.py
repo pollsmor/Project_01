@@ -62,6 +62,8 @@ def go_to_page(query):
 
 #returns thrustVac, spVac, spSL, and dryW
 def get_wiki_info(query):
+    if 'rocket' not in query:
+        query += ' rocket'
     info = go_to_page(query)
     info = info['parse']['text']['*']                #all content of the wiki page (html)
     imp_info = {}
