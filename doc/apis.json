@@ -1,15 +1,14 @@
 {
     "wolfram": {
         "link":"http://api.wolframalpha.com/v2/query?appid={_key}&input={_query}&output=json",
-        "key":"P4747E-2545R4KKGK"
+        "key":""
     },
     "wikipeda": {
-        "link":"",
+        "link":"https://en.wikipedia.org/w/api.php?action=parse&format=json&pageid={query}",
         "key":""
     },
     "nasa": {
-        "link":"",
+        "link":"https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI?table=exoplanets&format=json&where=pl_name%20like%20%27{query}%25%27",
         "key":""
     }
 }
-
