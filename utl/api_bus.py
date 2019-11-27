@@ -23,8 +23,8 @@ class API(object):
 WOLFRAM = API('P4747E-2545R4KKGK','http://api.wolframalpha.com/v2/query?appid={_key}&input={query}&output=json')
 WIKIPEDIA_SEARCH = API('','https://en.wikipedia.org/w/api.php?action=query&format=json&prop=categories&list=search&continue=-||categories&srsearch={query}&sroffset=0')
 WIKIPEDIA_PAGE_INFO = API('','https://en.wikipedia.org/w/api.php?action=parse&format=json&pageid={query}')
-EXOPLANETS = API('REPLACE WITH KEY','REPLACE WITH URL')
-    
+
+EXOPLANETS = API('','https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI?table=exoplanets&format=json&where=pl_name%20like%20%27{query}%25%27')
     #opens and reads the url query provided, url is a string
 def get_json(url):
     u = urllib.request.urlopen(url)
@@ -33,9 +33,6 @@ def get_json(url):
     return info
 
 #-----------------------Wolfram Alpha Functions---------------------------
-
-#api_bus.wolfram(query: str) -> dict
-#this is not explicitly called, only get_equation_result is
 def wolfram(query):
     url = WOLFRAM.get_url(query)
     info = get_json(url)
@@ -60,7 +57,7 @@ def go_to_page(query):
     info = get_json(url)
     return info
 
-#returns thrustVac, spVac, spSL, and dryW
+#returns thrustVac, spVac, and dryW
 def get_wiki_info(query):
     if 'rocket' not in query:
         query += ' rocket'
@@ -95,19 +92,6 @@ def get_wiki_info(query):
     imp_info['exhaust'] = spVacVelocity_str
 
     
-##    ## Isp (SL) found in infobox
-##    spSL = -1
-##    for i in range(0, 2):
-##        spSL = info.find('(SL)', spSL + 1)
-##    spSL += 13
-##    spSL_str = info[spSL:spSL+20]
-##    #add arbitrary large number for dif sig figs
-##    if '&' in spSL_str or ' ' in spSL_str:
-##        spSL_str = str(spSL_str.partition('&')[0])
-##        spSL_str = spSL_str.partition(' ')[0]
-##    imp_info['spSL'] = spSL_str
-
-    
     ##Dry Weight found in infobox
     dry = info.find("Dry weight") + 19
     dry_str = info[dry:dry+30]     #add arbitrary large number for dif sig figs
@@ -119,11 +103,30 @@ def get_wiki_info(query):
     
     return imp_info
 
+#-----------------------Exoplanets Functions---------------------------
+def exoplanets(query):
+    url = EXOPLANETS.get_url(query)
+    print(url)
+    info = get_json(url)
+
+    if (len(info) <= 0): #no search results found
+        print("No search results found.")
+
+    result = info[0]
+
+    output = {}
+    output['name'] = result['pl_name']
+    output['ra'] = result['ra']
+    output['dec'] = result['dec']
+    output['distance'] = result['st_dist'] #in parsecs
+    print(output)
+    return output
+
 
 ##Tests
-print(get_wiki_info("merlin rocket"))
-print(get_wiki_info("Rocketdyne F-1"))
-print(get_wiki_info("RS-25"))
+#print(get_wiki_info("merlin rocket"))
+#print(get_wiki_info("Rocketdyne F-1"))
+#print(get_wiki_info("RS-25"))
 
 
 ##Things to return
