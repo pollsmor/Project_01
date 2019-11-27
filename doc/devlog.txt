@@ -119,3 +119,17 @@ Estimated date of completion: 2019-12-02
 elizabethD -- 2019-11-25 20:29
   - Fixed error in get_url
   - Implemented wiki functions, pulls data from rocket wikis
+  
+kevinL -- 2019-11-26 08:30
+  - Obtain the necessary data from the exoplanets API as a dictionary
+  
+elizabethD -- 2019-11-26 08:36
+  - Finished wiki function to return rocket data  
+
+emoryW -- 2019-11-26 08:37
+  - Made results.html iterate through query pieces and display them on the page
+  - Added extra words (ex: years) that give query pieces units
+
+yevgeniyG -- 2019-11-26 18:31
+  - Finalized query parsing (for now)
+    - changed fuel to tons only
