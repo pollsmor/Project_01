@@ -6,34 +6,14 @@ __dbfile__ = 'data/cache.db'
     
 def INIT(replace=0):
     db = sqlite3.connect(__dbfile__)
-    tables = ['engines','planets','timeqs','massqs']
+    schema = '\n'.split(open('utl/db_schema.txt','r').read())
     if replace:
-        for table in tables:
-            db.execute('drop table ?;', table)
-
-    db.execute(
-        '''create table engines 
-        (name text primary key, 
-        mass numeric, impulse numeric, thrust numeric
-        img text);'''
-    )
-    db.execute(
-        '''create table planets
-        (name text primary key,  
-        distance numeric, ra numeric, dec numeric);'''
-    )
-    db.execute(
-        '''create table queries 
-        (origin text, 
-        method text, 
-        destination text,
-        engine text, 
-        fuel integer, 
-        time integer);'''
-    )
+        for cmd in schema[3:]:
+            db.execute(cmd)
+    for cmd in schema[:3]:
+        db.execute(cmd)
     db.commit()
     db.close()
-
 
 def store(results):
     _insert(table='queries', values=results['results'])
