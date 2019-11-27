@@ -65,7 +65,13 @@ def get_wiki_info(query):
     info = go_to_page(query)
     info = info['parse']['text']['*']                #all content of the wiki page (html)
     imp_info = {}
+    
+    if 'merlin' in query and '1c' in query:
+        start_index = info.find("Merlin 1C")
+        info = info[start_index:]
 
+    if 'Thrust (vac.)' not in info:
+        raise QueryFailure('Incompatible Information to Wikipedia\'s API')
 
     ##Thrust (vac.) found in infobox
     thrustVac = info.find("Thrust (vac.)") + 22
@@ -124,9 +130,12 @@ def exoplanets(query):
     return output
 
 ##Tests
-#print(get_wiki_info("merlin rocket"))
+#print(get_wiki_info("merlin 1c rocket"))
+#print(get_wiki_info("merlin"))
 #print(get_wiki_info("Rocketdyne F-1"))
 #print(get_wiki_info("RS-25"))
+#print(get_wiki_info("wow"))
+
 
 ##Things to return
 #wolfram: equation result
