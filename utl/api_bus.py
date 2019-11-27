@@ -34,9 +34,6 @@ def get_json(url):
     return info
 
 #-----------------------Wolfram Alpha Functions---------------------------
-
-#api_bus.wolfram(query: str) -> dict
-#this is not explicitly called, only get_equation_result is
 def wolfram(query):
     url = WOLFRAM.get_url(query)
     info = get_json(url)
@@ -61,8 +58,10 @@ def go_to_page(query):
     info = get_json(url)
     return info
 
-#returns thrustVac, spVac, spSL, and dryW
+#returns thrustVac, spVac, and dryW
 def get_wiki_info(query):
+    if 'rocket' not in query:
+        query += ' rocket'
     info = go_to_page(query)
     info = info['parse']['text']['*']                #all content of the wiki page (html)
     imp_info = {}
@@ -73,39 +72,34 @@ def get_wiki_info(query):
     thrustVac_str = info[thrustVac:thrustVac+30]     #add arbitrary large number for dif sig figs
     if '&' in thrustVac_str:
         thrustVac_str = thrustVac_str.partition('&')[0]
-    imp_info['thrustVac'] = thrustVac_str
+    imp_info['thrust'] = thrustVac_str
 
 
-    ## /sp (vac.) found in infobox
+    ## Isp (vac.) found in infobox
     spVac = -1
     for i in range(0, 2):
         spVac = info.find('(vac.)', spVac + 1)
     spVac += 15
-    spVac_str = info[spVac:spVac+20]                  #add arbitrary large number for dif sig figs
+    spVac_str = info[spVac:spVac+30]                  #add arbitrary large number for dif sig figs
+    spVacVelocity = spVac_str
     if '&' in spVac_str or ' ' in spVac_str:
         spVac_str = str(spVac_str.partition('&')[0])
         spVac_str = spVac_str.partition(' ')[0]
-    imp_info['spVac'] = spVac_str
-
-
-    ## /sp (SL) found in infobox
-    spSL = -1
-    for i in range(0, 2):
-        spSL = info.find('(SL)', spSL + 1)
-    spSL += 13
-    spSL_str = info[spSL:spSL+20]                  #add arbitrary large number for dif sig figs
-    if '&' in spSL_str or ' ' in spSL_str:
-        spSL_str = str(spSL_str.partition('&')[0])
-        spSL_str = spSL_str.partition(' ')[0]
-    imp_info['spSL'] = spSL_str
+    imp_info['impulse'] = spVac_str
+    spVacVelocity_index = spVacVelocity.find('(')  + 1
+    spVacVelocity_str = spVacVelocity[spVacVelocity_index:spVacVelocity_index+5]     #add arbitrary number for dif sig figs within range
+    if '&' in spVacVelocity_str:
+        spVacVelocity_str = spVacVelocity_str.partition('&')[0]
+    imp_info['exhaust'] = spVacVelocity_str
 
 
     ##Dry Weight found in infobox
     dry = info.find("Dry weight") + 19
     dry_str = info[dry:dry+30]     #add arbitrary large number for dif sig figs
-    if ' ' in dry_str:
+    if ' ' in dry_str or '&' in dry_str:
+        dry_str = str(dry_str.partition('&')[0])
         dry_str = dry_str.partition(' ')[0]
-    imp_info['dryW'] = dry_str
+    imp_info['mass'] = dry_str
 
 
     return imp_info
@@ -129,13 +123,10 @@ def exoplanets(query):
     print(output)
     return output
 
-#have to remove functions from class
-#print(wolfram("http://api.wolframalpha.com/v2/query?appid=P4747E-2545R4KKGK&input=2^4&output=json"))
-
 ##Tests
-print(get_wiki_info("merlin rocket"))
-print(get_wiki_info("Rocketdyne F-1"))
-print(get_wiki_info("RS-25"))
+#print(get_wiki_info("merlin rocket"))
+#print(get_wiki_info("Rocketdyne F-1"))
+#print(get_wiki_info("RS-25"))
 
 ##Things to return
 #wolfram: equation result
