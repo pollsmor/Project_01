@@ -6,11 +6,19 @@ __dbfile__ = 'data/cache.db'
     
 def INIT(replace=0):
     db = sqlite3.connect(__dbfile__)
-    schema = '\n'.split(open('utl/db_schema.txt','r').read())
+    schemaf = open('utl/db_schema.txt','r')
+    schema = schemaf.read()
+    print(schema)
+    schema = schema.split('\n')
     if replace:
         for cmd in schema[3:]:
-            db.execute(cmd)
+            try:
+                print(cmd)
+                db.execute(cmd)
+            except sqlite3.OperationalError as ex:
+                print(ex)
     for cmd in schema[:3]:
+        print(cmd)
         db.execute(cmd)
     db.commit()
     db.close()
@@ -34,3 +42,5 @@ def _insert(*args, **kwargs):
     db.execute('insert or ignore into %s %s values %s' % (table, cols, argfs))
     db.commit()
     db.close()
+
+INIT(1)

@@ -1,6 +1,6 @@
-CREATE TABLE engines (name TEXT PRIMARY KEY, mass NUMERIC, impluse NUMERIC, exhaust NUMERIC, thrust NUMERIC, img TEXT, propellant TEXT);
-CREATE TABLE planets (name TEXT PRIMARY KEY, distance NUMERIC, ra NUMERIC, declination NUMERIC);
-CREATE TABLE queries (origin TEXT, method TEXT, destination TEXT, engine TEXT, mass NUMERIC, time NUMERIC);
+CREATE TABLE IF NOT EXISTS engines (name TEXT PRIMARY KEY, mass NUMERIC, impluse NUMERIC, exhaust NUMERIC, thrust NUMERIC, img TEXT, propellant TEXT);
+CREATE TABLE IF NOT EXISTS planets (name TEXT PRIMARY KEY, distance NUMERIC, ra NUMERIC, declination NUMERIC);
+CREATE TABLE IF NOT EXISTS queries (origin TEXT, method TEXT, destination TEXT, engine TEXT, mass NUMERIC, time NUMERIC);
 DROP TABLE engines;
 DROP TABLE planets;
 DROP TABLE queries;
