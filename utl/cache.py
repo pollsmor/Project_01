@@ -27,16 +27,17 @@ def _search_one(*args, **kwargs):
 
     # generates selection order
     cols = [item[0] for item in query]
-    cols = '(%s)' % (','.join(cols))
+    cols = '(%s)' % (','.join(cols)) # generates "(col1,col2,...)"
     
     # generates 'WHERE' clause
-    where = ['(%s=?)' % item[0] for item in query]
-    where = ' AND '.join(where)
+    where = ['(%s=?)' % item[0] for item in query] # generates ['(col1=?)','(col2=?)',...]
+    where = ' AND '.join(where) # converts to "(col1=?) AND (col2=?) AND ..."
 
     args = tuple([item[1] for item in query])
     
     db = sqlite3.connect(__dbfile__)
     result = db.execute('select %s from %s where %s;' % (cols, table, where), args)
+    result = [item for item in result]
     if len(result):
         return result[1]
     else:
@@ -56,12 +57,12 @@ def _insert(*args, **kwargs):
 
     # forms an ordering between columns and values
     # removes necessity for correctly ordering entries in values
-    cols = '(%s)' % ','.join([item[0] for item in values])
-    contents = tuple([item[1] for item in values])
-    argfs = '(%s)' % ','.join(['?' for item in contents])
+    cols = '(%s)' % ','.join([item[0] for item in values]) # generates "(col1,col2,...)"
+    contents = tuple([item[1] for item in values]) # argument tuple for insertion
+    argfs = '(%s)' % ','.join(['?' for item in contents]) # generates "(?,?,...)"
 
     db = sqlite3.connect(__dbfile__)
-    db.execute('insert or ignore into %s %s values %s' % (table, cols, argfs), contents)
+    db.execute('insert or ignore into %s %s values %s;' % (table, cols, argfs), contents)
     db.commit()
     db.close()
 
