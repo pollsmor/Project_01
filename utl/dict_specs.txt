@@ -36,3 +36,35 @@ cache.store: dict
             "mass": $(engine mass)
         }
     }
+
+cache.search(dict): dict
+    IN
+    dict = {
+        "type":"travel time"|"fuel mass"
+        "fuel": $(fuel quantity) | "time": $(time)
+    }
+    OUT
+    dict = {
+        "type":"travel time"|"fuel mass"
+        "fuel": $(fuel quantity) | "time": $(time) | False
+        "source": False | {
+            "name": $(planet name)
+            "distance": $(distance)
+            "ra": $(right ascension)
+            "dec": $(declination)
+            (...)
+        }
+        "destination": False | {
+            "name": $(planet name)
+            "dist": $(distance)
+            "ra": $(right ascension)
+            "dec": $(declination)
+            (...)
+        }
+        "method": $(method) | False
+        "engine": False | {
+            "name": $(engine name)
+            "thrust": $(vacuum thrust)
+            "isp": $(specific impulse)
+            "mass": $(engine mass)
+        }
