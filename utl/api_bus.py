@@ -50,7 +50,7 @@ def wolfram(query):
     if any(c.isalpha() for c in result):
         raise QueryFailure('Improper Request to Wolfram\'s API')
     return float(result)
-
+    
 
 #-----------------------Wikipedia Functions---------------------------
 #returns pageID of first wiki result of query
@@ -173,7 +173,6 @@ def exoplanets(query):
 #print(wikipedia("wow"))
 #print(exoplanets('Kepler-74'))
 #print(exoplanets('hi there'))
-
 
 
 ##Things to return
