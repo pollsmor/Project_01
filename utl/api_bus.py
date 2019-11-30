@@ -36,7 +36,7 @@ def get_json(url):
 
 #-----------------------Wolfram Alpha Functions---------------------------
 #throws an error if equation fails, otherwise returns dict of info
-def wolfram(query):
+def get_equation_result(query):
     url = WOLFRAM.get_url(query)
     info = get_json(url)
     if info['queryresult']['success'] == True:
@@ -44,24 +44,28 @@ def wolfram(query):
     raise QueryFailure('Request to Wolfram\'s API failed') 
 
 #returns result of a given equation
-def get_equation_result(query):
-    info = wolfram(query)
-    return info['queryresult']['pods'][1]['subpods'][0]['plaintext']
+def wolfram(query):
+    info = get_equation_result(query)
+    result = info['queryresult']['pods'][1]['subpods'][0]['plaintext']
+    if any(c.isalpha() for c in result):
+        raise QueryFailure('Improper Request to Wolfram\'s API')
+    return float(result)
+
 
 #-----------------------Wikipedia Functions---------------------------
 #returns pageID of first wiki result of query
-def wiki(query):
+def get_wiki_info(query):
     url = WIKIPEDIA_SEARCH.get_url(query)
     info = get_json(url)
     return str(info['query']['search'][0]['pageid'])
 
 #returns dict of info
 def go_to_page(query):
-    url = WIKIPEDIA_PAGE_INFO.get_url(wiki(query))
+    url = WIKIPEDIA_PAGE_INFO.get_url(get_wiki_info(query))
     return get_json(url)
 
 #returns dict of important info
-def get_wiki_info(query):
+def wikipedia(query):
     if 'rocket' not in query:                       #adds 'rocket' if the query does not contain it
         query += ' rocket'
     info = go_to_page(query)
@@ -143,11 +147,11 @@ def get_wiki_info(query):
 #-----------------------Exoplanets Functions---------------------------
 def exoplanets(query):
     url = EXOPLANETS.get_url(query)
-    print(url)
+    #print(url)
     info = get_json(url)
 
     if (len(info) <= 0): #no search results found
-        print("No search results found.")
+        raise QueryFailure('Request to NASA Exoplanet\'s API failed') 
 
     result = info[0]
 
@@ -156,15 +160,20 @@ def exoplanets(query):
     output['ra'] = result['ra']
     output['dec'] = result['dec']
     output['distance'] = result['st_dist'] #in parsecs
-    print(output)
+    #print(output)
     return output
 
 ##Tests
-#print(get_wiki_info("merlin 1c rocket"))
-#print(get_wiki_info("merlin"))
-#print(get_wiki_info("Rocketdyne F-1"))
-#print(get_wiki_info("RS-25"))
-#print(get_wiki_info("wow"))
+#print(wolfram('2^4'))
+#print(wolfram('why'))
+#print(wikipedia("merlin 1c rocket"))
+#print(wikipedia("merlin"))
+#print(wikipedia("Rocketdyne F-1"))
+#print(wikipedia("RS-25"))
+#print(wikipedia("wow"))
+#print(exoplanets('Kepler-74'))
+#print(exoplanets('hi there'))
+
 
 
 ##Things to return
