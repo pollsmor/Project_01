@@ -53,67 +53,85 @@ def get_equation_result(query):
 def wiki(query):
     url = WIKIPEDIA_SEARCH.get_url(query)
     info = get_json(url)
-    pageID = info['query']['search'][0]['pageid']
-    return pageID
+    return str(info['query']['search'][0]['pageid'])
 
 #returns dict of info
 def go_to_page(query):
-    pageID = str(wiki(query))
-    url = WIKIPEDIA_PAGE_INFO.get_url(pageID)
-    info = get_json(url)
-    return info
+    url = WIKIPEDIA_PAGE_INFO.get_url(wiki(query))
+    return get_json(url)
 
 #returns thrustVac, spVac, and dryW
 def get_wiki_info(query):
-    #adds 'rocket' if the query does not contain it
-    if 'rocket' not in query:
+    if 'rocket' not in query:                       #adds 'rocket' if the query does not contain it
         query += ' rocket'
     info = go_to_page(query)
-    info = info['parse']['text']['*']                #all content of the wiki page (html)
+    info = info['parse']['text']['*']               #all content of the wiki page (html)
     imp_info = {}
 
 #checks to see if there is an infobox on the wiki page
-    infobox = info.find('infobox')
-    while infobox != -1:                            #searches through all of info to see if there are multiple infoboxes, one with the proper query
-        query = query.replace('rocket', '').strip()
-        if query not in info[infobox:infobox+100].lower():
-            info = info[infobox+1:]
-            infobox = info.find('infobox')
-        else break
-    if inbox == -1:                                   #throws error if the page does not have an infobox with the given query
-        raise QueryFailure('Incompatible Information to Wikipedia\'s API')
+    infobox = info.find('infobox')                  #all necessary info is found in the infobox of each wiki page
+    #print(infobox)
+    query = query.replace('rocket', '').strip().lower()
+    if query.find(' ') != -1:                       #create a list of all the words in the query if more than 1
+        queryList = list(query.partition(' '))
+        queryList.remove(' ')
+        #print(queryList)
+        found = False
+        while found == False and infobox != -1:     #while there is an infobox that exists and the query has not been found
+            for i in queryList:                     #iterate through the words in the query
+                if i in info[infobox:infobox+100].lower():
+                    found = True                    #if the element is found, break and proceed
+                    print('found')
+                    break
+            if found == False:                      #else search for another infobox
+                info = info[infobox+1:]
+                infobox = info.find('infobox')
+                print('searching')
+        if infobox == -1:                           #throws error if the page does not have an infobox with the given query
+            raise QueryFailure('Incompatible Information to Wikipedia\'s API')
+    else:                                           #single word query case
+        while infobox != -1:
+            if query not in info[infobox:infobox+100].lower():  #searches for another infobox
+                info = info[infobox+1:]
+                infobox = info.find('infobox')
+            else:
+                break                               #breaks if query found
+        if infobox == -1:                           #throws error if the page does not have an infobox with the given query
+            raise QueryFailure('Incompatible Information to Wikipedia\'s API')
 
-    ##Thrust (vac.) found in infobox
-    thrustVac = info.find("Thrust (vac.)") + 22
-    thrustVac_str = info[thrustVac:thrustVac+30]     #add arbitrary large number for dif sig figs
-    if '&' in thrustVac_str:                         #remove everything after the &
+#now we know that the query is found inside an infobox that should have the necessary information
+
+    ##Thrust (vac.)
+    thrustVac = info.find("Thrust (vac.)") + 22     #finds thrust then moves index to value
+    thrustVac_str = info[thrustVac:thrustVac+30]    #add arbitrary large number for dif sig figs
+    if '&' in thrustVac_str:                        #remove everything after the &
         thrustVac_str = thrustVac_str.partition('&')[0]
-    imp_info['thrust'] = thrustVac_str
+    imp_info['thrust'] = thrustVac_str              #add to dict
 
 
-    ## Isp (vac.) found in infobox
+    ## Isp (vac.) and velocity found in infobox
     spVac = -1
-    for i in range(0, 2):                           #find the second instance of (vac.) because the first is for Thrust (vac.)
+    for i in range(0, 2):                           #find the second instance of (vac.), first is for Thrust (vac.)
         spVac = info.find('(vac.)', spVac + 1)
-    spVac += 15
+    spVac += 15                                     #finds impulse then moves index to value
     spVac_str = info[spVac:spVac+30]
     spVacVelocity = spVac_str
-    if '&' in spVac_str or ' ' in spVac_str:
+    if '&' in spVac_str or ' ' in spVac_str:        #remove everything after the & or ' '
         spVac_str = str(spVac_str.partition('&')[0])
         spVac_str = spVac_str.partition(' ')[0]
-    imp_info['impulse'] = spVac_str
-    spVacVelocity_index = spVacVelocity.find('(')  + 1
+    imp_info['impulse'] = spVac_str                 #add to dict
+    spVacVelocity_index = spVacVelocity.find('(')  + 1  #velocity is found right after impulse in ()
     spVacVelocity_str = spVacVelocity[spVacVelocity_index:spVacVelocity_index+5]     #add arbitrary number for dif sig figs within range
-    if '&' in spVacVelocity_str:
+    if '&' in spVacVelocity_str:                    #remove everything after the &
         spVacVelocity_str = spVacVelocity_str.partition('&')[0]
     imp_info['exhaust'] = spVacVelocity_str
 
 
     ##Dry Weight found in infobox
-    dry = info.find("Dry weight") + 19
+    dry = info.find("Dry weight") + 19              #finds mass then moves index to value
     dry_str = info[dry:dry+30]
     if ' ' in dry_str or '&' in dry_str:
-        dry_str = str(dry_str.partition('&')[0])
+        dry_str = str(dry_str.partition('&')[0])    #remove everything after the & or ' '
         dry_str = dry_str.partition(' ')[0]
     imp_info['mass'] = dry_str
 
@@ -150,6 +168,6 @@ def exoplanets(query):
 
 
 ##Things to return
-#wolfram: equation result
-#nasa: dist, ra, rec, interesting things
-#wiki: thrust, /sp(vac.), /sp(SL), dry weight
+#wolfram alpha: equation result
+#nasa exoplanet: name, ra, dec, distance
+#wikipedia: thrust - Thrust (vac.), impulse - Isp (vac.), velocity - Isp (vac.) (), mass - Dry weight, propellant - Propellant
