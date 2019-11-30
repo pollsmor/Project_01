@@ -60,7 +60,7 @@ def go_to_page(query):
     url = WIKIPEDIA_PAGE_INFO.get_url(wiki(query))
     return get_json(url)
 
-#returns thrustVac, spVac, and dryW
+#returns dict of important info
 def get_wiki_info(query):
     if 'rocket' not in query:                       #adds 'rocket' if the query does not contain it
         query += ' rocket'
@@ -109,7 +109,7 @@ def get_wiki_info(query):
     imp_info['thrust'] = thrustVac_str              #add to dict
 
 
-    ## Isp (vac.) and velocity found in infobox
+    ## Isp (vac.) and velocity
     spVac = -1
     for i in range(0, 2):                           #find the second instance of (vac.), first is for Thrust (vac.)
         spVac = info.find('(vac.)', spVac + 1)
@@ -127,7 +127,7 @@ def get_wiki_info(query):
     imp_info['exhaust'] = spVacVelocity_str
 
 
-    ##Dry Weight found in infobox
+    ##Dry Weight
     dry = info.find("Dry weight") + 19              #finds mass then moves index to value
     dry_str = info[dry:dry+30]
     if ' ' in dry_str or '&' in dry_str:
