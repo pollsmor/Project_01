@@ -5,7 +5,8 @@
 
 
 import re
-import api_bus
+from utl.api_bus import wolfram, wikipedia, exoplanets
+from utl.cache import search as cachesearch, store
 
 #included separately due to frequency of use and modification
 planet_pattern = '[a-z]+(\-[0-9]+ ?[a-z ])?'
@@ -31,7 +32,7 @@ query_patterns = {
         re.IGNORECASE)
 }
 #reduces a query parameter to raw content using the regular expression and the given function
-reduction_patterns = {
+reductions = {
     'method':(re.compile('(reach|flyby|(get|fly) to)$'), 
         lambda s: s if s == "flyby" else "reach"),
     'destination':(re.compile('( %s)$' % planet_pattern, re.IGNORECASE),
@@ -46,13 +47,38 @@ reduction_patterns = {
         lambda i: int(i))
 }
 
+# TODO: STORE EQUATIONS
+equations = {
+    'distance':'',
+    'mass':'',
+    'time':''
+}
+
 class BadQuery(Exception):
     pass
 
 def search(query):
     query = _parse(query)
-    # -- REPLACE -- # with API requests
-    return query # -- REPLACE -- # with results
+    result = cachesearch(query)
+    if type(result) != dict:
+        return result
+    if not result['engine']:
+        result['engine'] = wikipedia(query['engine'])
+    if not result['origin']:
+        result['origin'] = exoplanets(query['origin'])
+    if not result['destination']:
+        result['destination'] = exoplanets(query['destination'])
+
+    # TODO: IMPLEMENT EQUATION PROCESSING
+    distance = equations['distance']
+    distance = wolfram(distance)
+    if query['type'] == 'travel time':
+        time = equations['time']
+        return wolfram(time)
+    elif query['type'] == 'fuel mass':
+        fuel = equations['fuel']
+        return wolfram(time)
+
 
 
 def _parse(query):
@@ -72,8 +98,8 @@ def _parse(query):
         match = re.search(query_patterns[category], query)
         if match:
             intermediate = substr(match, query)
-            final_raw = substr(re.search(reduction_patterns[category][0], intermediate), intermediate)
-            final = reduction_patterns[category][1](final_raw)
+            final_raw = substr(re.search(reductions[category][0], intermediate), intermediate)
+            final = reductions[category][1](final_raw)
             params[category] = final
             # print('Reduced \"%s\" to \"%s\"' % (intermediate, final))
         elif default != '':
@@ -88,7 +114,7 @@ def _parse(query):
         set_category(category = 'fuel')
     elif re.search(query_patterns['fuel mass'], query):
         params['type'] = 'fuel mass'
-        set_category(category = 'time', default = 'minimal')
+        set_category(category = 'time')
     else:
         raise BadQuery('Query error: question type not recognized')
 
