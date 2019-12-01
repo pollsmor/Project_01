@@ -5,7 +5,7 @@
 
 
 import re
-from utl.api_bus import wolfram, wikipedia, exoplanets
+from utl.api_bus import wolfram, wikipedia, exoplanets, QueryFailure
 from utl.cache import search as cachesearch, store
 
 #included separately due to frequency of use and modification
@@ -63,21 +63,36 @@ def search(query):
     if type(result) != dict:
         return result
     if not result['engine']:
-        result['engine'] = wikipedia(query['engine'])
+        try:
+            result['engine'] = wikipedia(query['engine'])
+        except QueryFailure as qf:
+            raise
     if not result['origin']:
-        result['origin'] = exoplanets(query['origin'])
+        try:
+            result['origin'] = exoplanets(query['origin'])
+        except QueryFailure as qf:
+            raise
     if not result['destination']:
-        result['destination'] = exoplanets(query['destination'])
+        try:
+            result['destination'] = exoplanets(query['destination'])
+        except QueryFailure as qf:
+            raise
 
     # TODO: IMPLEMENT EQUATION PROCESSING
     distance = equations['distance']
     distance = wolfram(distance)
     if query['type'] == 'travel time':
         time = equations['time']
-        return wolfram(time)
+        try:
+            return wolfram(time)
+        except QueryFailure as qf:
+            raise
     elif query['type'] == 'fuel mass':
         fuel = equations['fuel']
-        return wolfram(time)
+        try:
+            return wolfram(fuel)
+        except QueryFailure as qf:
+            raise
 
 
 
