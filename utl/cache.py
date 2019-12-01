@@ -4,12 +4,16 @@ __dbfile__ = 'data/cache.db'
 
 # defines default order of selection
 default_orders = {
-    'engines': ['name', 'mass', 'impulse', 'exhaust', 'thrust', 'img', 'propellant'],
+    'engines': ['name', 'mass', 'impulse', 'exhaust', 'thrust', 'propellant'],
     'planets': ['name', 'distance', 'ra', 'dec'] 
 }
 
+class CacheError(Exception):
+    pass
+
 def INIT(replace=0):
     db = sqlite3.connect(__dbfile__)
+
     with open('utl/db_schema.txt','r') as schemaf:
         schema = schemaf.read().split('\n')
     if replace:
@@ -24,9 +28,28 @@ def INIT(replace=0):
     db.close()
 
 def search(query):
-    # should: compare the query against the entries in queries
-    # if the match isn't perfect, find extant entries in planets and engines
-    # if matches aren't found, value False
+    db = sqlite3.connect(__dbfile__)
+    pairs = query.items()
+    
+
+    qtype = query['type']
+    del query['type']
+    conds = ' AND '.join(['(%s=?)' % item[0] for item in pairs]) # generates "(col1=?) AND (col2=?) AND ..."
+    args = tuple([item[1] for item in pairs])
+
+    command = 'select %s from queries where ' + conds 
+    if qtype == 'travel time':
+        result = db.execute(command % 'time', args)
+    elif qtype == 'fuel mass':
+        result = db.execute(command % 'fuel', args)
+
+    if len(result):
+        return result[0][0]
+    else:
+        query['engine'] = _search_item(table='engines', name=query['engine'])
+        query['origin'] = _search_item(table='planets', name=query['origin'])
+        query['destination'] = _search_item(table='planets', name=query['destination'])
+    
     return query
 
 def _search_item(*args, **kwargs):
@@ -49,6 +72,7 @@ def store(results):
     _insert(table='planets', values=results['destination'])
 
 def _insert(*args, **kwargs):
+    db = sqlite3.connect(__dbfile__)
     table = kwargs['table']
     values = kwargs['values'].items()
 
@@ -58,7 +82,7 @@ def _insert(*args, **kwargs):
     contents = tuple([item[1] for item in values]) # argument tuple for insertion
     argfs = '(%s)' % ','.join(['?' for item in contents]) # generates "(?,?,...)"
 
-    db = sqlite3.connect(__dbfile__)
+    
     db.execute('insert or ignore into %s %s values %s;' % (table, cols, argfs), contents)
     db.commit()
     db.close()
