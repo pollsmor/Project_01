@@ -5,8 +5,8 @@
 
 
 import re
-from utl.api_bus import wolfram, wikipedia, exoplanets, QueryFailure
-from utl.cache import search as cachesearch, store
+from api_bus import wolfram, wikipedia, exoplanets, QueryFailure
+from cache import search as cachesearch, store
 
 #included separately due to frequency of use and modification
 planet_pattern = '[a-z]+(\-[0-9]+ ?[a-z ])?'
@@ -60,6 +60,7 @@ class BadQuery(Exception):
 def search(query):
     query = _parse(query)
     result = cachesearch(query)
+    print(query)
     if type(result) != dict:
         return result
     if not result['engine']:
@@ -137,7 +138,7 @@ def _parse(query):
     set_category(category = 'destination')
     set_category(category = 'method', default = 'reach')
     set_category(category = 'engine')
-
+    print(params)
     return params
 
 def dict_print(d):
@@ -153,8 +154,10 @@ test_queries = [
     "how long to reach kepler-10 from kepler-11 using merlin 1d and 10kg of fuel"
 ]
 
-# for query in test_queries:
-#     try:
-#         dict_print(search(query))
-#     except BadQuery as badness:
-#         print(badness)
+for query in test_queries:
+    try:
+        print(search(query))
+    except BadQuery as badness:
+        print(badness)
+    except QueryFailure as qf:
+        print(qf)

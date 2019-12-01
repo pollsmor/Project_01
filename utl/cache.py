@@ -30,19 +30,24 @@ def INIT(replace=0):
 def search(query):
     db = sqlite3.connect(__dbfile__)
     pairs = query.items()
-    
+    query = dict(pairs)
+    print(query)
 
     qtype = query['type']
     del query['type']
-    conds = ' AND '.join(['(%s=?)' % item[0] for item in pairs]) # generates "(col1=?) AND (col2=?) AND ..."
+    del query['query']
+    print(query)
+    
+    conds = ' AND '.join(['%s=?' % item[0] for item in pairs]) # generates "(col1=?) AND (col2=?) AND ..."
     args = tuple([item[1] for item in pairs])
 
     command = 'select %s from queries where ' + conds 
     if qtype == 'travel time':
         result = db.execute(command % 'time', args)
     elif qtype == 'fuel mass':
-        result = db.execute(command % 'fuel', args)
+        result = db.execute(command % 'mass', args)
 
+    result = [item for item in result]
     if len(result):
         return result[0][0]
     else:
@@ -56,9 +61,9 @@ def _search_item(*args, **kwargs):
     table = kwargs['table']
     name = kwargs['name']
 
-    order = '(%s)' % ','.join(default_orders[table])
+    order = ','.join(default_orders[table])
     db = sqlite3.connect(__dbfile__)
-    result = db.execute('select ? from ? where (name = ?);', (order, table, name))
+    result = db.execute('select %s from %s where name=?;' % (order, table), (name,))
     result = [item for item in result]
     if len(result):
         return dict(zip(default_orders[table], result[0])) # converts result to dictionary
@@ -78,7 +83,7 @@ def _insert(*args, **kwargs):
 
     # forms an ordering between columns and values
     # removes necessity for correctly ordering entries in values
-    cols = '(%s)' % ','.join([item[0] for item in values]) # generates "(col1,col2,...)"
+    cols = '%s' % ','.join([item[0] for item in values]) # generates "(col1,col2,...)"
     contents = tuple([item[1] for item in values]) # argument tuple for insertion
     argfs = '(%s)' % ','.join(['?' for item in contents]) # generates "(?,?,...)"
 
@@ -86,5 +91,3 @@ def _insert(*args, **kwargs):
     db.execute('insert or ignore into %s %s values %s;' % (table, cols, argfs), contents)
     db.commit()
     db.close()
-
-INIT(1)
