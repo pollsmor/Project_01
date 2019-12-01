@@ -148,8 +148,8 @@ def dict_print(d):
     print('}')
 
 test_queries = [
-    "how long to reach kepler-10 c using merlin 1d and 1000kg of fuel",
-    "how long to get to kepler-10 d using RS-25 and 1000.2kg of fuel",
+    "how long to reach kepler-10 c using merlin 1d and 1000 tons of fuel",
+    "how long to get to kepler-10 d using RS-25 and 1000.2 tons of fuel",
     "how much fuel to flyby kepler-10 d using RS-25 in 10 years",
     "how long to reach kepler-10 from kepler-11 using merlin 1d and 10kg of fuel"
 ]

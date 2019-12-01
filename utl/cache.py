@@ -29,13 +29,12 @@ def INIT(replace=0):
 
 def search(query):
     db = sqlite3.connect(__dbfile__)
-    pairs = query.items()
-    query = dict(pairs)
-    print(query)
-
+    query = dict(query)
     qtype = query['type']
     del query['type']
     del query['query']
+
+    pairs = query.items()
     print(query)
     
     conds = ' AND '.join(['%s=?' % item[0] for item in pairs]) # generates "(col1=?) AND (col2=?) AND ..."
@@ -45,7 +44,7 @@ def search(query):
     if qtype == 'travel time':
         result = db.execute(command % 'time', args)
     elif qtype == 'fuel mass':
-        result = db.execute(command % 'mass', args)
+        result = db.execute(command % 'fuel', args)
 
     result = [item for item in result]
     if len(result):
