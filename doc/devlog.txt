@@ -133,3 +133,10 @@ emoryW -- 2019-11-26 08:37
 yevgeniyG -- 2019-11-26 18:31
   - Finalized query parsing (for now)
     - changed fuel to tons only
+
+kevinL -- the week of 11-25-19
+----Design doc changes----
+  - Further simplified component map
+  - Updated route names to be in line with the project
+  - More detailed explanations of what the project entails
+
