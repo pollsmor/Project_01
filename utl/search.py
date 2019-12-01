@@ -123,8 +123,6 @@ def _parse(query):
     set_category(category = 'method', default = 'reach')
     set_category(category = 'engine')
 
-
-    
     return params
 
 def dict_print(d):
