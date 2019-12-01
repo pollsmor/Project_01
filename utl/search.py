@@ -9,7 +9,7 @@ from api_bus import wolfram, wikipedia, exoplanets, QueryFailure
 from cache import search as cachesearch, store
 
 #included separately due to frequency of use and modification
-planet_pattern = '[a-z]+(\-[0-9]+ ?[a-z ])?'
+planet_pattern = '[a-z]+(\-[0-9]+ ?([a-z][^a-z])?)?'
 rocket_pattern = '(Merlin |Rocketdyne |BMW |S[0-9]\.)?[\-a-zA-Z0-9]+'
 
 # maps query parameters to regular expessions
@@ -151,7 +151,7 @@ test_queries = [
     "how long to reach kepler-10 c using merlin 1d and 1000 tons of fuel",
     "how long to get to kepler-10 d using RS-25 and 1000.2 tons of fuel",
     "how much fuel to flyby kepler-10 d using RS-25 in 10 years",
-    "how long to reach kepler-10 from kepler-11 using merlin 1d and 10kg of fuel"
+    "how long to reach kepler-10 from kepler-11 using merlin 1d and 10 tons of fuel"
 ]
 
 for query in test_queries:
