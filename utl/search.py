@@ -106,7 +106,7 @@ def search(query):
 
 
 def _parse(query):
-    query = query.lower()
+    # query = query.lower()
     params = {}
     params['query'] = query
 
@@ -149,10 +149,7 @@ def _parse(query):
     return params
 
 test_queries = [
-    "how long to reach kepler-10 c using merlin 1d and 1000 tons of fuel",
-    "how long to get to kepler-10 d using RS-25 and 1000.2 tons of fuel",
-    "how much fuel to flyby kepler-10 d using RS-25 in 10 years",
-    "how long to reach kepler-10 from kepler-11 using merlin 1d and 10 tons of fuel"
+    "how long to reach Kepler-74 b using merlin 1d and 1000 tons of fuel"
 ]
 
 for query in test_queries:
