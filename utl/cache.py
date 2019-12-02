@@ -69,24 +69,24 @@ def search(query): # searches db for query
 
 
 def store(results):
-    _insert(table='queries', values=results['results'])
-    _insert(table='engines', values=results['engine'])
-    _insert(table='planets', values=results['origin'])
-    _insert(table='planets', values=results['destination'])
+    insert(table='queries', values=results['results'])
+    insert(table='engines', values=results['engine'])
+    insert(table='planets', values=results['origin'])
+    insert(table='planets', values=results['destination'])
 
 
-def _insert(*args, **kwargs):
+def insert(*args, **kwargs):
     db = sqlite3.connect(__dbfile__)
     table = kwargs['table']
     values = kwargs['values'].items()
 
     # forms an ordering between columns and values
     # removes necessity for correctly ordering entries in values
-    cols = '%s' % ','.join([item[0] for item in values]) # generates "(col1,col2,...)"
+    cols = '(%s)' % ','.join([item[0] for item in values]) # generates "(col1,col2,...)"
     contents = tuple([item[1] for item in values]) # argument tuple for insertion
     argfs = '(%s)' % ','.join(['?' for item in contents]) # generates "(?,?,...)"
 
-    
-    db.execute('insert or ignore into %s %s values %s;' % (table, cols, argfs), contents)
+    cmd = 'insert or ignore into %s %s values %s;' % (table, cols, argfs)
+    db.execute(cmd, contents)
     db.commit()
     db.close()
