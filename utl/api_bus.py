@@ -41,7 +41,7 @@ def get_equation_result(query):
     info = get_json(url)
     if info['queryresult']['success'] == True:
         return info
-    raise QueryFailure('Request to Wolfram\'s API failed') 
+    raise QueryFailure('Request to Wolfram\'s API failed')
 
 #returns result of a given equation
 def wolfram(query):
@@ -50,7 +50,7 @@ def wolfram(query):
     if any(c.isalpha() for c in result):
         raise QueryFailure('Improper Request to Wolfram\'s API')
     return float(result)
-    
+
 
 #-----------------------Wikipedia Functions---------------------------
 #returns pageID of first wiki result of query
@@ -151,7 +151,7 @@ def exoplanets(query):
     info = get_json(url)
 
     if (len(info) <= 0): #no search results found
-        raise QueryFailure('Request to NASA Exoplanet\'s API failed') 
+        raise QueryFailure('Request to NASA Exoplanet\'s API failed')
 
     result = info[0]
 
@@ -164,14 +164,17 @@ def exoplanets(query):
     return output
 
 ##Tests
-#print(wolfram('2^4'))
+print(wolfram('2^4'))
+print("\n")
 #print(wolfram('why'))
-#print(wikipedia("merlin 1c rocket"))
-#print(wikipedia("merlin"))
-#print(wikipedia("Rocketdyne F-1"))
-#print(wikipedia("RS-25"))
+print(wikipedia("merlin 1c rocket"))
+print(wikipedia("merlin"))
+print(wikipedia("Rocketdyne F-1"))
+print(wikipedia("RS-25"))
 #print(wikipedia("wow"))
-#print(exoplanets('Kepler-74'))
+print("\n")
+print(exoplanets('Kepler-74'))
+print(exoplanets("Proxima"))
 #print(exoplanets('hi there'))
 
 
