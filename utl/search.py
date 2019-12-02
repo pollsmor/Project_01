@@ -49,9 +49,9 @@ reductions = {
 
 # TODO: STORE EQUATIONS
 equations = {
-    'distance':'',
-    'mass':'',
-    'time':''
+    'distance':'2^2',
+    'mass':'2^2',
+    'time':'2^2'
 }
 
 class BadQuery(Exception):
@@ -60,10 +60,9 @@ class BadQuery(Exception):
 def search(query):
     query = _parse(query)
     result = cachesearch(query)
-    print(query)
     if type(result) != dict:
         return result
-    
+    print(result)
     # uses APIs to find data not found in cache
     if not result['engine']:
         try:
@@ -141,6 +140,7 @@ def _parse(query):
     set_category(category = 'engine')
     print(params)
     return params
+
 
 test_queries = [
     "how long to reach kepler-10 c using merlin 1d and 1000 tons of fuel",

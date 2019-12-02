@@ -3,9 +3,10 @@ import sqlite3
 __dbfile__ = 'data/cache.db'
 
 # defines default order of selection
-default_orders = {
+orders = {
     'engines': ['name', 'mass', 'impulse', 'exhaust', 'thrust', 'propellant'],
-    'planets': ['name', 'distance', 'ra', 'dec'] 
+    'planets': ['name', 'distance', 'ra', 'dec'],
+    'queries': ['origin','method','destination','engine'] 
 }
 
 class CacheError(Exception):
@@ -27,53 +28,52 @@ def INIT(replace=0):
     db.commit()
     db.close()
 
-def search(query):
-    db = sqlite3.connect(__dbfile__)
-    query = dict(query)
-    qtype = query['type']
-    del query['type']
-    del query['query']
 
-    pairs = query.items()
-    print(query)
+def search(query): # searches db for query
+
+    def search_item(*args, **kwargs):
+        table = kwargs['table']
+        name = kwargs['name']
+
+        order = ','.join(orders[table])
+        db = sqlite3.connect(__dbfile__)
+        result = db.execute('select %s from %s where name=?;' % (order, table), (name,))
+        result = [item for item in result]
+        if len(result):
+            return dict(zip(orders[table], result[0])) # converts result to dictionary
+        else:
+            return False
     
-    conds = ' AND '.join(['%s=?' % item[0] for item in pairs]) # generates "(col1=?) AND (col2=?) AND ..."
-    args = tuple([item[1] for item in pairs])
+    db = sqlite3.connect(__dbfile__)
 
-    command = 'select %s from queries where ' + conds 
-    if qtype == 'travel time':
-        result = db.execute(command % 'time', args)
-    elif qtype == 'fuel mass':
-        result = db.execute(command % 'fuel', args)
+    # determines columns containing question and answer
+    if query['type'] == 'travel time':
+        col_query, col_answer = 'fuel', 'time'
+    elif query['type'] == 'fuel mass':
+        col_query, col_answer = 'time', 'fuel'
+    
+    cols = orders['queries'] + [col_query,]
+    where = ' and '.join( [(col + '=?') for col in cols] ) # generates WHERE clause: "col1=? and col2=? and ..."
+    args = tuple( map(lambda column: query[column], cols) ) # generates arguments for WHERE clause
 
+    result = db.execute('select %s from queries where %s' % (col_answer, where), args)
     result = [item for item in result]
     if len(result):
         return result[0][0]
     else:
-        query['engine'] = _search_item(table='engines', name=query['engine'])
-        query['origin'] = _search_item(table='planets', name=query['origin'])
-        query['destination'] = _search_item(table='planets', name=query['destination'])
-    
-    return query
+        result = {}
+        result['origin'] = search_item(table='planets',name=query['origin'])
+        result['destination'] = search_item(table='planets',name=query['destination'])
+        result['engine'] = search_item(table='engines',name=query['engine'])
+        return result
 
-def _search_item(*args, **kwargs):
-    table = kwargs['table']
-    name = kwargs['name']
-
-    order = ','.join(default_orders[table])
-    db = sqlite3.connect(__dbfile__)
-    result = db.execute('select %s from %s where name=?;' % (order, table), (name,))
-    result = [item for item in result]
-    if len(result):
-        return dict(zip(default_orders[table], result[0])) # converts result to dictionary
-    else:
-        return False
 
 def store(results):
     _insert(table='queries', values=results['results'])
     _insert(table='engines', values=results['engine'])
     _insert(table='planets', values=results['origin'])
     _insert(table='planets', values=results['destination'])
+
 
 def _insert(*args, **kwargs):
     db = sqlite3.connect(__dbfile__)
