@@ -65,17 +65,23 @@ def search(query):
         return result
     if not result['engine']:
         try:
+            print("Sending query to Wikipedia: %s" % query['engine'])
             result['engine'] = wikipedia(query['engine'])
+            print("Result from Wikipedia: %s" % result['engine'])
         except QueryFailure as qf:
             raise
     if not result['origin']:
         try:
+            print("Sending query to NASA EXO: %s" % query['origin'])
             result['origin'] = exoplanets(query['origin'])
+            print("Result from EXO: %s" % result['origin'])
         except QueryFailure as qf:
             raise
     if not result['destination']:
         try:
+            print("Sending query to NASA EXO: %s" % query['destination'])
             result['destination'] = exoplanets(query['destination'])
+            print("Result from EXO: %s" % result['destination']) 
         except QueryFailure as qf:
             raise
 
