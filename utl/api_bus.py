@@ -38,14 +38,14 @@ def get_equation_result(query):
     info = get_json(url)
     if info['queryresult']['success'] == True:
         return info
-    raise QueryFailure('Request to Wolfram\'s API failed') 
+    raise QueryFailure('Request to Wolfram\'s API Unsuccessful, Input Proper Query') 
 
 #returns result of a given equation
 def wolfram(query):
     info = get_equation_result(query)
     result = info['queryresult']['pods'][1]['subpods'][0]['plaintext']
     if any(c.isalpha() for c in result):
-        raise QueryFailure('Bad Request to Wolfram\'s API')
+        raise QueryFailure('Bad Request to Wolfram\'s API, Input Equation to Return A Number')
     return float(result)
     
 
@@ -99,11 +99,19 @@ def wikipedia(query):
         if infobox == -1:
             raise QueryFailure('Incompatible Information to Wikipedia\'s API')
 
-    #the query is found inside an infobox that should have the necessary information
+    #the query is found inside an infobox that should have all necessary information
+
+    infobox += 37
+    name_str = info[infobox:infobox+50]             #add arbitrary large number for dif name lengths
+    #print(name_str)
+    if '<' in name_str:
+        name_str = name_str.partition('<')[0]
+    imp_info['name'] = name_str
+    
 
     ##Thrust (vac.)
     thrustVac = info.find("Thrust (vac.)") + 22
-    thrustVac_str = info[thrustVac:thrustVac+30]    #add arbitrary large number for dif sig figs
+    thrustVac_str = info[thrustVac:thrustVac+30]    
     if '&' in thrustVac_str:
         thrustVac_str = thrustVac_str.partition('&')[0]
     imp_info['thrust'] = thrustVac_str
@@ -155,14 +163,13 @@ def exoplanets(query):
     output['name'] = result['pl_name']
     output['ra'] = result['ra']
     output['dec'] = result['dec']
-    output['distance'] = result['st_dist'] #in parsecs
+    output['distance'] = result['st_dist']
     #print(output)
     return output
 
 ##Tests
 #print(wolfram('2^4'))
 #print(wolfram('why'))
-#print(wikipedia("merlin 1c rocket"))
 #print(wikipedia("merlin"))
 #print(wikipedia("Rocketdyne F-1"))
 #print(wikipedia("RS-25"))
