@@ -9,7 +9,7 @@ from api_bus import wolfram, wikipedia, exoplanets, QueryFailure
 from cache import search as cachesearch, store
 
 #included separately due to frequency of use and modification
-planet_pattern = '[a-z]+(\-[0-9]+ ?[a-z ])?'
+planet_pattern = '[a-z]+(\-[0-9]+ ?([a-z][^a-z])?)?'
 rocket_pattern = '(Merlin |Rocketdyne |BMW |S[0-9]\.)?[\-a-zA-Z0-9]+'
 
 # maps query parameters to regular expessions
@@ -63,6 +63,8 @@ def search(query):
     print(query)
     if type(result) != dict:
         return result
+    
+    # uses APIs to find data not found in cache
     if not result['engine']:
         try:
             print("Sending query to Wikipedia: %s" % query['engine'])
@@ -123,11 +125,10 @@ def _parse(query):
             final_raw = substr(re.search(reductions[category][0], intermediate), intermediate)
             final = reductions[category][1](final_raw)
             params[category] = final
-            # print('Reduced \"%s\" to \"%s\"' % (intermediate, final))
         elif default != '':
             params[category] = default
         else: # if the default action isn't specified, assumes error
-            raise BadQuery(f'Query error: {category} not present')
+            raise BadQuery('Query error: %s not present' % category)
 
     # PROCESSING
     # Determine question type
@@ -147,17 +148,11 @@ def _parse(query):
     print(params)
     return params
 
-def dict_print(d):
-    print('{')
-    for item in d.items():
-        print('\t%s: %s' % item)
-    print('}')
-
 test_queries = [
-    "how long to reach kepler-10 c using merlin 1d and 1000kg of fuel",
-    "how long to get to kepler-10 d using RS-25 and 1000.2kg of fuel",
+    "how long to reach kepler-10 c using merlin 1d and 1000 tons of fuel",
+    "how long to get to kepler-10 d using RS-25 and 1000.2 tons of fuel",
     "how much fuel to flyby kepler-10 d using RS-25 in 10 years",
-    "how long to reach kepler-10 from kepler-11 using merlin 1d and 10kg of fuel"
+    "how long to reach kepler-10 from kepler-11 using merlin 1d and 10 tons of fuel"
 ]
 
 for query in test_queries:
