@@ -49,9 +49,16 @@ reductions = {
 
 # TODO: STORE EQUATIONS
 equations = {
-    'distance':'',
-    'mass':'',
-    'time':''
+    'distance':'Sqrt{{{dist1}^2 + {dist2}^2 - 2({dist1})({dist2})(Sin{{{ra1}}}Sin{{{ra2}}}Cos{{{decdiff}}} + Cos{{{ra1}}}Cos{{{ra2}}})}}',
+    'reach': {
+        'fuel':'{end}Exp{{(2*{dist})/({exh}*{time})}}',
+        'time':'(2*{dist})({exh}*Ln{{({start})/({end})}})'
+    },
+    'flyby': {
+        'fuel':'{end}Exp{{Frac{{{dist}}}{{{exh}*{time}}}}}',
+        'time':'Frac{{{dist}}}{{{exh}Ln{{Frac{{{start}}}{{{end}}}}}}}'
+    }
+    
 }
 
 class BadQuery(Exception):
@@ -88,17 +95,34 @@ def search(query):
             raise
 
     # TODO: IMPLEMENT EQUATION PROCESSING
-    distance = equations['distance']
-    distance = wolfram(distance)
+    distance = equations['distance'].format(
+        dist1 = float(result['origin']['distance']),
+        dist2 = float(result['destination']['distance']),
+        ra1 = float(result['origin']['ra']),
+        ra2 = float(result['destination']['ra']),
+        decdiff = float(result['origin']['dec']) - float(result['destination']['dec'])
+    )
     if query['type'] == 'travel time':
-        time = equations['time']
+        time = equations[query['method']]['time'].format(
+            dist=distance,
+            exh=float(result['engine']['exhaust']),
+            end=float(result['engine']['mass']) + 10,
+            start = query['fuel'] + float(result['engine']['mass']) + 10
+        )
         try:
+            print('Sending equation \"%s\" to Wolfram|Alpha' % time)
             return wolfram(time)
         except QueryFailure as qf:
             raise
     elif query['type'] == 'fuel mass':
-        fuel = equations['fuel']
+        fuel = equations[query['method']]['fuel'].format(
+            dist=distance,
+            exh=float(result['engine']['exhaust']),
+            end=float(result['engine']['mass']) + 10,
+            time=query['time']
+        )
         try:
+            print('Sending equation \"%s\" to Wolfram|Alpha' % fuel)
             return wolfram(fuel)
         except QueryFailure as qf:
             raise
@@ -149,8 +173,16 @@ def _parse(query):
     return params
 
 test_queries = [
-    "how long to reach Kepler-74 b using merlin 1d and 1000 tons of fuel"
+    "how long to reach Kepler-74 b using merlin 1d and 1000 tons of fuel",
+    'how much fuel to reach Kepler-74 b using merlin 1d in 100 years'
 ]
+# print(equations['distance'].format(
+#     dist1=100,
+#     dist2=300,
+#     ra1=0,
+#     ra2=300,
+#     decdiff=120-60
+# ))
 
 for query in test_queries:
     try:
