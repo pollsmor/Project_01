@@ -40,6 +40,7 @@ def get_equation_result(query):
         return info
     raise QueryFailure('Request to Wolfram\'s API Unsuccessful, Input Proper Query') 
 
+
 #returns result of a given equation
 def wolfram(query):
     info = get_equation_result(query)
@@ -47,7 +48,7 @@ def wolfram(query):
     if any(c.isalpha() for c in result):
         raise QueryFailure('Bad Request to Wolfram\'s API, Input Equation to Return A Number')
     return float(result)
-    
+
 
 #-----------------------Wikipedia Functions---------------------------
 #returns pageID of first wiki result of query
@@ -168,13 +169,16 @@ def exoplanets(query):
     return output
 
 ##Tests
-#print(wolfram('2^4'))
+print(wolfram('2^4'))
+print("\n")
 #print(wolfram('why'))
 #print(wikipedia("merlin"))
-#print(wikipedia("Rocketdyne F-1"))
+print(wikipedia("Rocketdyne F-1"))
 #print(wikipedia("RS-25"))
 #print(wikipedia("wow"))
+print("\n")
 #print(exoplanets('Kepler-74'))
+print(exoplanets("Proxima"))
 #print(exoplanets('hi there'))
 
 
