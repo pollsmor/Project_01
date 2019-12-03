@@ -88,12 +88,12 @@ def wikipedia(query):
             for i in queryList: 
                 if i in info[infobox:infobox+100].lower():
                     found = True
-                    print('found')
+                    #print('found')
                     break
             if found == False:
                 info = info[infobox+1:]
                 infobox = info.find('infobox')
-                print('searching')
+                #print('searching')
         if infobox == -1:                           #throws error if the page does not have an infobox with the given query
             raise QueryFailure('Incompatible Information to Wikipedia\'s API')
     else:
@@ -172,7 +172,7 @@ def exoplanets(query):
     return output
 
 ##Tests
-#print(wolfram('2^4'))
+#print(wolfram('100000000000*8000000000'))
 #print("\n")
 #print(wolfram('why'))
 #print(wikipedia("merlin"))
