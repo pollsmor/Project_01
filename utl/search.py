@@ -47,18 +47,16 @@ reductions = {
         lambda i: int(i))
 }
 
-# TODO: STORE EQUATIONS
 equations = {
     'distance':'Sqrt{{{dist1}^2 + {dist2}^2 - 2({dist1})({dist2})(Sin{{{ra1}}}Sin{{{ra2}}}Cos{{{decdiff}}} + Cos{{{ra1}}}Cos{{{ra2}}})}}',
     'reach': {
-        'fuel':'{end}Exp{{(2*{dist})/({exh}*{time})}}',
+        'fuel':'{end}*Exp{{(2*{dist})/({exh}*{time})}}',
         'time':'(2*{dist})({exh}*Ln{{({start})/({end})}})'
     },
     'flyby': {
-        'fuel':'{end}Exp{{Frac{{{dist}}}{{{exh}*{time}}}}}',
-        'time':'Frac{{{dist}}}{{{exh}Ln{{Frac{{{start}}}{{{end}}}}}}}'
+        'fuel':'{end}*Exp{{({dist})/({exh}*{time})}}',
+        'time':'({dist})({exh}*Ln{{({start})/({end})}})'
     }
-    
 }
 
 class BadQuery(Exception):
