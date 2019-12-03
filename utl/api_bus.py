@@ -169,16 +169,16 @@ def exoplanets(query):
     return output
 
 ##Tests
-print(wolfram('2^4'))
-print("\n")
+#print(wolfram('2^4))
+#print("\n")
 #print(wolfram('why'))
 #print(wikipedia("merlin"))
-print(wikipedia("Rocketdyne F-1"))
+#print(wikipedia("Rocketdyne F-1"))
 #print(wikipedia("RS-25"))
 #print(wikipedia("wow"))
-print("\n")
+#print("\n")
 #print(exoplanets('Kepler-74'))
-print(exoplanets("Proxima"))
+#print(exoplanets("Proxima"))
 #print(exoplanets('hi there'))
 
 
