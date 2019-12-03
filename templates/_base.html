@@ -13,7 +13,7 @@
 
 
     </head>
-    <body style="background-color:#7649fe;">
+    <body style="color:white;">
 
       <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#808080;">
 
@@ -22,28 +22,29 @@
         </a>
         <a href=../static/help.html target="_blank"><input type="button" class="rounded-0" value="Help/FAQ"></a>
       </nav>
+      <div style="background-image: url('https://i.pinimg.com/originals/4a/66/6b/4a666b16cf8a15b9687edb5085012589.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+        <br><br>
 
-      <br><br>
+        {% block content %}
 
-      {% block content %}
+          <br><br><br>
 
-        <br><br><br>
+          <h1 style="color:white;" class="p-2">{{ message }}</h1><br>
 
-        <h1 style="color:white;" class="p-2">{{ message }}</h1><br>
+          <form action="/results" method="GET"> <!--GET because user security isn't applicable!-->
+            <div class="form-group p-3">
+              <label for="query"><h3>Please input your query here.</h3></label>
+              <input type="text" required="required" name="query" class="form-control" id="query"  placeholder="how much fuel to reach kepler-10c using merlin 1d in 20 years"><br>
+              <button style="background-color:lightgrey;" type="submit" class="btn rounded-0">Submit</button>
+            </div>
+          </form>
 
-        <form action="/results" method="GET"> <!--GET because user security isn't applicable!-->
-          <div class="form-group p-3">
-            <label for="query"><h3>Please input your query here.</h3></label>
-            <input type="text" required="required" name="query" class="form-control" id="query"  placeholder="how much fuel to reach kepler-10c using merlin 1d in 20 years"><br>
-            <button style="background-color:lightgrey;" type="submit" class="btn rounded-0">Submit</button>
-          </div>
-        </form>
+          <br><br><br>
 
-        <br><br><br>
+        {% endblock %}
 
-      {% endblock %}
-
-      <br><br><br><br>
+        <br><br><br><br>
+      </div>
       <footer style="background-color:#808080; color:white;" class="font-small p-2">
         <br>
         <div class="row">
