@@ -123,7 +123,7 @@ def wikipedia(query):
     thrustVac_str = info[thrustVac:thrustVac+30]    
     if '&' in thrustVac_str:
         thrustVac_str = thrustVac_str.partition('&')[0]
-    imp_info['thrust'] = thrustVac_str
+    imp_info['thrust'] = float(thrustVac_str.replace(',',''))
 
 
     ## Isp (vac.) and velocity
@@ -136,12 +136,12 @@ def wikipedia(query):
     if '&' in spVac_str or ' ' in spVac_str:
         spVac_str = str(spVac_str.partition('&')[0])
         spVac_str = spVac_str.partition(' ')[0]
-    imp_info['impulse'] = spVac_str
+    imp_info['impulse'] = float(spVac_str.replace(',',''))
     spVacVelocity_index = spVacVelocity.find('(')  + 1  #velocity is found right after impulse in ()
     spVacVelocity_str = spVacVelocity[spVacVelocity_index:spVacVelocity_index+5]
     if '&' in spVacVelocity_str:
         spVacVelocity_str = spVacVelocity_str.partition('&')[0]
-    imp_info['exhaust'] = spVacVelocity_str
+    imp_info['exhaust'] = float(spVacVelocity_str.replace(',',''))
 
 
     ##Dry Weight
@@ -150,10 +150,7 @@ def wikipedia(query):
     if ' ' in dry_str or '&' in dry_str:
         dry_str = str(dry_str.partition('&')[0])
         dry_str = dry_str.partition(' ')[0]
-    imp_info['mass'] = dry_str
-
-    imp_info['propellant'] = 'INSERT PROPELLANT'
-
+    imp_info['mass'] = float(dry_str.replace(',',''))
 
     return imp_info
 
@@ -177,11 +174,11 @@ def exoplanets(query):
     return output
 
 ##Tests
-print(wolfram('2^4'))
+#print(wolfram('2^4'))
 #print("\n")
 #print(wolfram('why'))
 #print(wikipedia("merlin"))
-#print(wikipedia("Rocketdyne F-1"))
+print(wikipedia("Rocketdyne F-1"))
 #print(wikipedia("RS-25"))
 #print(wikipedia("wow"))
 #print("\n")
