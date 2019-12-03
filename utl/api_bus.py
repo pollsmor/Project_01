@@ -2,6 +2,24 @@ import urllib.request
 from urllib.parse import quote
 import json
 
+"""Contains functions that can access and obtain the necessary info from all three APIs.
+
+Classes:
+- API: modularizes the obtaining of data from the respective APIs.
+
+Exceptions:
+- QueryFailure: custom exception that gets thrown when the query is invalid
+
+Functions:
+- get_json(url): takes a URL and returns the JSON present on that page.
+- get_equation_result(query): give an equation, returns the JSON outputted by the API.
+- wolfram(query): give an equation, gets the JSON from get_equation_result, returns the necessary info from the JSON.
+- get_wiki_info(query): give a query, gets the page ID of the first search result on Wikipedia.
+- go_to_page(query): give a query, get the page ID from get_wiki_info, returns the JSON from that page.
+- wikipedia(query): returns the necessary info as a dict from the JSON obtained by go_to_page.
+- exoplanets(query): give a query, obtains the necessary info from the exoplanets API as a dict.
+"""
+
 class QueryFailure(Exception):
     pass
 
@@ -188,17 +206,18 @@ def exoplanets(query):
     return output
 
 ##Tests
-print(wolfram('2^4'))
-print("\n")
+#print(wolfram('2^4'))
+#print("\n")
 #print(wolfram('why'))
 #print(wikipedia("merlin"))
-print(wikipedia("Rocketdyne F-1"))
+#print(wikipedia("Rocketdyne F-1"))
 #print(wikipedia("RS-25"))
 #print(wikipedia("wow"))
-print("\n")
+#print("\n")
 #print(exoplanets('Kepler-74'))
-print(exoplanets("Proxima"))
+#print(exoplanets("Proxima"))
 #print(exoplanets('hi there'))
+#print(API.__doc__)
 
 
 ##Things to return
