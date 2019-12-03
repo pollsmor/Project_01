@@ -8,9 +8,8 @@ from flask import *
 from utl import search
 from os import urandom
 
-
 app = Flask(__name__)
-app.secret_key = urandom(32)
+app.secret_key = urandom(32) # won't be necessary for this project as we aren't using sessions
 
 @app.route('/')
 def index():

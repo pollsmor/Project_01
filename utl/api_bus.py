@@ -4,6 +4,7 @@
 import urllib.request
 from urllib.parse import quote
 import json
+import re
 
 class QueryFailure(Exception):
     pass
@@ -40,11 +41,27 @@ def get_equation_result(query):
         return info
     raise QueryFailure('Request to Wolfram\'s API Unsuccessful, Input Proper Query') 
 
+def substr(match, string): # substring using span in Match object
+    return string[match.span()[0]:match.span()[1]]
 
 #returns result of a given equation
 def wolfram(query):
     info = get_equation_result(query)
     result = info['queryresult']['pods'][1]['subpods'][0]['plaintext']
+####    floatP = re.compile('[0-9]+(\.[0-9]+)?')
+####    expon = re.compile('[0-9]+\^[0-9]+')
+##    response = "3.22606... × 10^18"
+####    floatpart = re.match(floatP, response)
+####    exppart = re.match(expon, response)
+####    print(exppart)
+####    floatpart = substr(floatpart, response)
+####    exppart = substr(exppart, response)
+####    print(floatpart+exppart)
+##    if ('...' in response):
+##        response = response.replace('...', '')
+##        firstFloat = response[0:7]
+##        print(response)
+##        print(firstFloat)
     if any(c.isalpha() for c in result):
         raise QueryFailure('Bad Request to Wolfram\'s API, Input Equation to Return A Number')
     return float(result)
@@ -169,7 +186,7 @@ def exoplanets(query):
     return output
 
 ##Tests
-#print(wolfram('2^4))
+#print(wolfram('2^4'))
 #print("\n")
 #print(wolfram('why'))
 #print(wikipedia("merlin"))

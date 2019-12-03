@@ -7,6 +7,16 @@
 import re
 import utl.api_bus
 
+"""Contains the search functionality needed by the front end developer.
+
+Exceptions:
+- QueryFailure: custom exception that gets thrown when the query is invalid
+
+Functions:
+- search(query): takes the dictionary from _parse and requests info from the three APIs, then returns that info.
+- _parse(query): takes a query and returns a dictionary of the parameters extracted from said query.
+"""
+
 # maps query parameters to regular expessions
 query_patterns = {
     'travel time':re.compile('(time|how long)'),
@@ -32,12 +42,14 @@ class BadQuery(Exception):
     pass
 
 def search(query):
+    """Takes the dictionary from _parse and requests info from the three APIs, then returns that info."""
     query = _parse(query)
     # -- REPLACE -- # with API requests
     return query # -- REPLACE -- # with results
 
 
 def _parse(query):
+    """Takes a query and returns a dictionary of the parameters extracted from said query."""
     query = query.lower()
     params = {}
     params['query'] = query
@@ -78,7 +90,7 @@ def _parse(query):
     set_category(category = 'engine')
 
 
-    
+
     return params
 
 
