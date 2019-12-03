@@ -156,5 +156,19 @@ elizabethD -- 2019-11-30 12:20
 yevgeniyG -- 2019-11-30 22:43
   - Wrote all functions (not tested)
 
+yevgeniyG -- 2019-12-02 08:25
+  - tested utl/cache, utl/search; working
 
+emoryW -- 2019-12-02 08:34
+  - Made API cards open a new tab when clicked
+  - Changed query in /help to match a possible query
 
+elizabethD -- 2019-12-02 08:39
+  - removed unnecessary comments
+  - added name of rocket to wiki dict
+  
+yevgeniyG -- 2019-12-02 14:39
+  - Finalized equations
+  
+kevinL -- 2019-12-02 20:30
+  - Docstrings galore (beware merge conflicts)
