@@ -47,24 +47,15 @@ def substr(match, string): # substring using span in Match object
 #returns result of a given equation
 def wolfram(query):
     info = get_equation_result(query)
-    result = info['queryresult']['pods'][1]['subpods'][0]['plaintext']
-####    floatP = re.compile('[0-9]+(\.[0-9]+)?')
-####    expon = re.compile('[0-9]+\^[0-9]+')
-##    response = "3.22606... × 10^18"
-####    floatpart = re.match(floatP, response)
-####    exppart = re.match(expon, response)
-####    print(exppart)
-####    floatpart = substr(floatpart, response)
-####    exppart = substr(exppart, response)
-####    print(floatpart+exppart)
-##    if ('...' in response):
-##        response = response.replace('...', '')
-##        firstFloat = response[0:7]
-##        print(response)
-##        print(firstFloat)
-    if any(c.isalpha() for c in result):
+    response = info['queryresult']['pods'][1]['subpods'][0]['plaintext']
+    if ('...' in response):
+        dec = response[:response.find('...')]
+        expon = response[response.find('^')+1:]
+        response = float(dec) * 10 ** float(expon)
+        print(response)
+    if any(c.isalpha() for c in response):
         raise QueryFailure('Bad Request to Wolfram\'s API, Input Equation to Return A Number')
-    return float(result)
+    return float(response)
 
 
 #-----------------------Wikipedia Functions---------------------------
@@ -186,7 +177,7 @@ def exoplanets(query):
     return output
 
 ##Tests
-#print(wolfram('2^4'))
+print(wolfram('2^4'))
 #print("\n")
 #print(wolfram('why'))
 #print(wikipedia("merlin"))
