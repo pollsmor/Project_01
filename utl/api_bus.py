@@ -15,8 +15,8 @@ class API(object):
         self.key = key
         self.url = url
 
-    #given a string query, returns the api request url as a string
-    def get_url(self, query="") -> str:
+    #generates url for api from query
+    def get_url(self, query='') -> str:
         query = quote(query)
         return self.url.format(_key = self.key, query = query)
 
@@ -106,7 +106,7 @@ def wikipedia(query):
 #now we know that the query is found inside an infobox that should have the necessary information
 
     ##Thrust (vac.)
-    thrustVac = info.find("Thrust (vac.)") + 22     #finds thrust then moves index to value
+    thrustVac = info.find('Thrust (vac.)') + 22     #finds thrust then moves index to value
     thrustVac_str = info[thrustVac:thrustVac+30]    #add arbitrary large number for dif sig figs
     if '&' in thrustVac_str:                        #remove everything after the &
         thrustVac_str = thrustVac_str.partition('&')[0]
@@ -132,7 +132,7 @@ def wikipedia(query):
 
 
     ##Dry Weight
-    dry = info.find("Dry weight") + 19              #finds mass then moves index to value
+    dry = info.find('Dry weight') + 19              #finds mass then moves index to value
     dry_str = info[dry:dry+30]
     if ' ' in dry_str or '&' in dry_str:
         dry_str = str(dry_str.partition('&')[0])    #remove everything after the & or ' '
@@ -166,11 +166,11 @@ def exoplanets(query):
 ##Tests
 #print(wolfram('2^4'))
 #print(wolfram('why'))
-#print(wikipedia("merlin 1c rocket"))
-#print(wikipedia("merlin"))
-#print(wikipedia("Rocketdyne F-1"))
-#print(wikipedia("RS-25"))
-#print(wikipedia("wow"))
+#print(wikipedia('merlin 1c rocket'))
+#print(wikipedia('merlin'))
+#print(wikipedia('Rocketdyne F-1'))
+#print(wikipedia('RS-25'))
+#print(wikipedia('wow'))
 #print(exoplanets('Kepler-74'))
 #print(exoplanets('hi there'))
 

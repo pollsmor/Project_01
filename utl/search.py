@@ -65,10 +65,9 @@ class BadQuery(Exception):
 def search(query):
     query = _parse(query)
     result = cachesearch(query)
-    print(query)
     if type(result) != dict:
         return result
-    
+    print(result)
     # uses APIs to find data not found in cache
     if not result['engine']:
         try:
@@ -169,6 +168,7 @@ def _parse(query):
     set_category(category = 'engine')
     print(params)
     return params
+
 
 test_queries = [
     "how long to reach Kepler-74 b using merlin 1d and 1000 tons of fuel",
