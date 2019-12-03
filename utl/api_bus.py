@@ -1,6 +1,3 @@
-#import json
-#from urllib.request import urlopen
-
 import urllib.request
 from urllib.parse import quote
 import json
@@ -9,13 +6,29 @@ class QueryFailure(Exception):
     pass
 
 class API(object):
+    """Modularizes the obtaining of data from the respective APIs.
+
+    Public methods:
+    - get_url(url)
+
+    Instance variables:
+    - key: str
+    - url: str
+    """
+
     key: str
     url: str
     def __init__(self, key, url):
+        """
+        - key: the API key (if required) for accessing the API.
+        - url: the base URL of the API (the API key and query can be inserted into it)
+        """
+
         self.key = key
         self.url = url
 
     def get_url(self, query="") -> str:
+        """Takes a query and inserts it into the link, then returns that link."""
         query = quote(query)
         return self.url.format(_key = self.key, query = query)
 
@@ -26,6 +39,7 @@ WIKIPEDIA_PAGE_INFO = API('','https://en.wikipedia.org/w/api.php?action=parse&fo
 EXOPLANETS = API('','https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI?table=exoplanets&format=json&where=pl_name%20like%20%27{query}%25%27')
 
 def get_json(url):
+    """Takes a URL and returns the JSON present on that page."""
     u = urllib.request.urlopen(url)
     response = u.read()
     info = json.loads(response)
@@ -34,15 +48,17 @@ def get_json(url):
 #-----------------------Wolfram Alpha Functions---------------------------
 #throws an error if equation fails, otherwise returns dict of info
 def get_equation_result(query):
+    """Give an equation, returns the JSON outputted by the API."""
     url = WOLFRAM.get_url(query)
     info = get_json(url)
     if info['queryresult']['success'] == True:
         return info
-    raise QueryFailure('Request to Wolfram\'s API Unsuccessful, Input Proper Query') 
+    raise QueryFailure('Request to Wolfram\'s API Unsuccessful, Input Proper Query')
 
 
 #returns result of a given equation
 def wolfram(query):
+    """Give an equation, gets the JSON from get_equation_result, returns the necessary info from the JSON."""
     info = get_equation_result(query)
     result = info['queryresult']['pods'][1]['subpods'][0]['plaintext']
     if any(c.isalpha() for c in result):
@@ -53,17 +69,19 @@ def wolfram(query):
 #-----------------------Wikipedia Functions---------------------------
 #returns pageID of first wiki result of query
 def get_wiki_info(query):
+    """Give a query, gets the page ID of the first search result on Wikipedia."""
     url = WIKIPEDIA_SEARCH.get_url(query)
     info = get_json(url)
     return str(info['query']['search'][0]['pageid'])
 
-#returns dict of info
 def go_to_page(query):
+    """Give a query, get the page ID from get_wiki_info, returns the JSON from that page."""
     url = WIKIPEDIA_PAGE_INFO.get_url(get_wiki_info(query))
     return get_json(url)
 
 #returns dict of important info
 def wikipedia(query):
+    """Returns the necessary info as a dict from the JSON obtained by go_to_page."""
     if 'rocket' not in query:
         query += ' rocket'
     info = go_to_page(query)
@@ -79,7 +97,7 @@ def wikipedia(query):
         #print(queryList)
         found = False
         while found == False and infobox != -1:
-            for i in queryList: 
+            for i in queryList:
                 if i in info[infobox:infobox+100].lower():
                     found = True
                     print('found')
@@ -108,11 +126,11 @@ def wikipedia(query):
     if '<' in name_str:
         name_str = name_str.partition('<')[0]
     imp_info['name'] = name_str
-    
+
 
     ##Thrust (vac.)
     thrustVac = info.find("Thrust (vac.)") + 22
-    thrustVac_str = info[thrustVac:thrustVac+30]    
+    thrustVac_str = info[thrustVac:thrustVac+30]
     if '&' in thrustVac_str:
         thrustVac_str = thrustVac_str.partition('&')[0]
     imp_info['thrust'] = thrustVac_str
@@ -151,12 +169,13 @@ def wikipedia(query):
 
 #-----------------------Exoplanets Functions---------------------------
 def exoplanets(query):
+    """Give a query, obtains the necessary info from the exoplanets API as a dict."""
     url = EXOPLANETS.get_url(query)
     #print(url)
     info = get_json(url)
 
     if (len(info) <= 0): #no search results found
-        raise QueryFailure('Bad Request to NASA Exoplanet\'s API failed') 
+        raise QueryFailure('Bad Request to NASA Exoplanet\'s API failed')
 
     result = info[0]
 
