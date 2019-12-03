@@ -11,7 +11,7 @@ from cache import search as cachesearch, store
 #included separately due to frequency of use and modification
 planet_pattern = '[a-z]+(\-[0-9]+ ?([a-z][^a-z])?)?'
 rocket_pattern = '(Merlin |Rocketdyne |BMW |S[0-9]\.)?[\-a-zA-Z0-9]+'
-
+parsec = int(3.086 * (10 ** 16))
 # maps query parameters to regular expessions
 query_patterns = {
     'travel time':re.compile('(time|how long)',
@@ -34,7 +34,7 @@ query_patterns = {
 #reduces a query parameter to raw content using the regular expression and the given function
 reductions = {
     'method':(re.compile('(reach|flyby|(get|fly) to)$'), 
-        lambda s: s if s == "flyby" else "reach"),
+        lambda s: s if s == 'flyby' else 'reach'),
     'destination':(re.compile('( %s)$' % planet_pattern, re.IGNORECASE),
         lambda s: s[1:-1]),
     'origin':(re.compile('( %s)$' % planet_pattern, re.IGNORECASE),
@@ -44,18 +44,18 @@ reductions = {
     'fuel':(re.compile('[0-9]*.?[0-9]+'),
         lambda f: float(f) * 1000),
     'time':(re.compile('[0-9]+'),
-        lambda i: int(i))
+        lambda i: float(i))
 }
-
-equations = {
-    'distance':'Sqrt{{{dist1}^2 + {dist2}^2 - 2({dist1})({dist2})(Sin{{{ra1}}}Sin{{{ra2}}}Cos{{{decdiff}}} + Cos{{{ra1}}}Cos{{{ra2}}})}}',
+# mathematical expressions to send to Wolfram|Alpha
+expressions = {
+    'distance':'Sqrt{{{dist1}^2 + {dist2}^2 - 2({dist1})({dist2})(Sin{{{ra1} degrees}}Sin{{{ra2} degrees}}Cos{{{decdiff} degrees}} + Cos{{{ra1} degrees}}Cos{{{ra2} degrees}})}}',
     'reach': {
         'fuel':'{end}*Exp{{(2*{dist})/({exh}*{time})}}',
-        'time':'(2*{dist})({exh}*Ln{{({start})/({end})}})'
+        'time':'(2*{dist})/({exh}*Ln{{({start})/({end})}})'
     },
     'flyby': {
         'fuel':'{end}*Exp{{({dist})/({exh}*{time})}}',
-        'time':'({dist})({exh}*Ln{{({start})/({end})}})'
+        'time':'({dist})/({exh}*Ln{{({start})/({end})}})'
     }
 }
 
@@ -71,58 +71,56 @@ def search(query):
     # uses APIs to find data not found in cache
     if not result['engine']:
         try:
-            print("Sending query to Wikipedia: %s" % query['engine'])
+            # print('Sending query to Wikipedia: %s' % query['engine'])
             result['engine'] = wikipedia(query['engine'])
-            print("Result from Wikipedia: %s" % result['engine'])
+            # print('Result from Wikipedia: %s' % result['engine'])
         except QueryFailure as qf:
             raise
     if not result['origin']:
         try:
-            print("Sending query to NASA EXO: %s" % query['origin'])
+            # print('Sending query to NASA EXO: %s' % query['origin'])
             result['origin'] = exoplanets(query['origin'])
-            print("Result from EXO: %s" % result['origin'])
+            # print('Result from EXO: %s' % result['origin'])
         except QueryFailure as qf:
             raise
     if not result['destination']:
         try:
-            print("Sending query to NASA EXO: %s" % query['destination'])
+            # print('Sending query to NASA EXO: %s' % query['destination'])
             result['destination'] = exoplanets(query['destination'])
-            print("Result from EXO: %s" % result['destination']) 
+            # print('Result from EXO: %s' % result['destination']) 
         except QueryFailure as qf:
             raise
 
-    # TODO: IMPLEMENT EQUATION PROCESSING
-    distance = equations['distance'].format(
-        dist1 = float(result['origin']['distance']),
-        dist2 = float(result['destination']['distance']),
-        ra1 = float(result['origin']['ra']),
-        ra2 = float(result['destination']['ra']),
-        decdiff = float(result['origin']['dec']) - float(result['destination']['dec'])
+    # Substitutes numbers into distance expression
+    distance = expressions['distance'].format(
+        dist1 = int(result['origin']['distance'] * parsec),
+        dist2 = int(result['destination']['distance'] * parsec),
+        ra1 = result['origin']['ra'],
+        ra2 = result['destination']['ra'],
+        decdiff = int(result['origin']['dec'] - result['destination']['dec'])
     )
+
+    # generates full expression corresponding to query
     if query['type'] == 'travel time':
-        time = equations[query['method']]['time'].format(
+        expr = expressions[query['method']]['time'].format(
             dist=distance,
-            exh=float(result['engine']['exhaust']),
-            end=float(result['engine']['mass']) + 10,
-            start = query['fuel'] + float(result['engine']['mass']) + 10
+            exh=result['engine']['exhaust'],
+            end=result['engine']['mass'] + 10,
+            start = query['fuel'] + result['engine']['mass'] + 10
         )
-        try:
-            print('Sending equation \"%s\" to Wolfram|Alpha' % time)
-            return wolfram(time)
-        except QueryFailure as qf:
-            raise
     elif query['type'] == 'fuel mass':
-        fuel = equations[query['method']]['fuel'].format(
+        expr = expressions[query['method']]['fuel'].format(
             dist=distance,
-            exh=float(result['engine']['exhaust']),
-            end=float(result['engine']['mass']) + 10,
+            exh=result['engine']['exhaust'],
+            end=result['engine']['mass'] + 10,
             time=query['time']
         )
-        try:
-            print('Sending equation \"%s\" to Wolfram|Alpha' % fuel)
-            return wolfram(fuel)
-        except QueryFailure as qf:
-            raise
+    
+    try:
+        print('Sending equation \'%s\' to Wolfram|Alpha' % expr)
+        return wolfram(expr)
+    except QueryFailure as qf:
+        raise
 
 
 
@@ -131,15 +129,15 @@ def _parse(query):
     params = {}
     params['query'] = query
 
-    # LOCAL FUNCTIONS
     def substr(match, string): # substring using span in Match object
         return string[match.span()[0]:match.span()[1]]
 
     def set_category(*args, **kwargs):
+        # Finds keywords for a category in query string
+        # Adds corresponding data to parameters dictionary
         category = kwargs['category']
         default = kwargs['default'] if ('default' in kwargs) else ''
 
-        # finds parameter in query using corresponding regex, adds to parameter dictionary
         match = re.search(query_patterns[category], query)
         if match:
             intermediate = substr(match, query)
@@ -151,7 +149,6 @@ def _parse(query):
         else: # if the default action isn't specified, assumes error
             raise BadQuery('Query error: %s not present' % category)
 
-    # PROCESSING
     # Determine question type
     if re.search(query_patterns['travel time'], query):
         params['type'] = 'travel time'
@@ -166,21 +163,15 @@ def _parse(query):
     set_category(category = 'destination')
     set_category(category = 'method', default = 'reach')
     set_category(category = 'engine')
-    print(params)
+
     return params
 
 
 test_queries = [
-    "how long to reach Kepler-74 b using merlin 1d and 1000 tons of fuel",
-    'how much fuel to reach Kepler-74 b using merlin 1d in 100 years'
+    'how long to reach Kepler-74 b using merlin 1d and 1000 tons of fuel',
+    'how much fuel to reach Kepler-74 b using merlin 1d in 100 years',
+    'how much fuel to reach Kepler-74 b from Kepler-70 a using rocketdyne F-1 in 1000 years'
 ]
-# print(equations['distance'].format(
-#     dist1=100,
-#     dist2=300,
-#     ra1=0,
-#     ra2=300,
-#     decdiff=120-60
-# ))
 
 for query in test_queries:
     try:
@@ -189,3 +180,4 @@ for query in test_queries:
         print(badness)
     except QueryFailure as qf:
         print(qf)
+    
