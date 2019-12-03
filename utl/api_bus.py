@@ -53,8 +53,6 @@ def wolfram(query):
         expon = response[response.find('^')+1:]
         response = float(dec) * 10 ** float(expon)
         print(response)
-    if any(c.isalpha() for c in response):
-        raise QueryFailure('Bad Request to Wolfram\'s API, Input Equation to Return A Number')
     return float(response)
 
 
@@ -178,7 +176,7 @@ def exoplanets(query):
 #print("\n")
 #print(wolfram('why'))
 #print(wikipedia("merlin"))
-print(wikipedia("Rocketdyne F-1"))
+#print(wikipedia("Rocketdyne F-1"))
 #print(wikipedia("RS-25"))
 #print(wikipedia("wow"))
 #print("\n")
