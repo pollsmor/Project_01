@@ -5,7 +5,17 @@
 
 
 import re
-import api_bus
+import utl.api_bus
+
+"""Contains the search functionality needed by the front end developer.
+
+Exceptions:
+- QueryFailure: custom exception that gets thrown when the query is invalid
+
+Functions:
+- search(query): takes the dictionary from _parse and requests info from the three APIs, then returns that info.
+- _parse(query): takes a query and returns a dictionary of the parameters extracted from said query.
+"""
 
 #included separately due to frequency of use and modification
 planet_pattern = '[a-z]+(\-[0-9]+ ?[a-z ])?'
@@ -42,12 +52,14 @@ class BadQuery(Exception):
     pass
 
 def search(query):
+    """Takes the dictionary from _parse and requests info from the three APIs, then returns that info."""
     query = _parse(query)
     # -- REPLACE -- # with API requests
     return query # -- REPLACE -- # with results
 
 
 def _parse(query):
+    """Takes a query and returns a dictionary of the parameters extracted from said query."""
     query = query.lower()
     params = {}
     params['query'] = query
@@ -90,7 +102,7 @@ def _parse(query):
     set_category(category = 'engine')
 
 
-    
+
     return params
 
 def dict_print(d):
@@ -100,6 +112,7 @@ def dict_print(d):
     print('}')
 
 test_queries = [
+<<<<<<< HEAD
     "how long to reach kepler-10 c using merlin 1d and 1000kg of fuel",
     "how long to get to kepler-10 d using RS-25 and 1000.2kg of fuel",
     "how much fuel to flyby kepler-10 d using RS-25 in 10 years",
@@ -111,3 +124,9 @@ for query in test_queries:
         dict_print(search(query))
     except BadQuery as badness:
         print(badness)
+=======
+    "how long to reach kepler-10c using merlin 1d and 1000kg of fuel",
+    "how long to get to kepler-10d using RS-25 and 1000.2kg of fuel",
+    "how much fuel to flyby kepler-10d using RS-25 in 10 years"
+]
+>>>>>>> bd7d754ed357f1393baf41f03ca3b03651af1763

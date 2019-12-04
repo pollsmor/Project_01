@@ -5,10 +5,21 @@
 {% block content %}
 <br><br><br><br><br><br>
   <div class="text-center">
-    <h1 style="color:black;" class="text-capitalize">{{ query }}</h1>
-    <strong>This is where our results are going to be presented.<br>
-    To fill in this stuff I need to know the format of how results are given to me.<br>
-    This page will get updated soon.<br></strong>
+    <h1 style="color:white;">{{ query }}</h1>
+    <strong>
+      <br>
+
+      {% for key in results %}
+        {{key}}: {{results[key]}}
+        {% if key == "time" or key == "Time" %} years{% endif %}
+        {% if results[key] == "Reach" or results[key] == "reach" %} (completely decelerates){% endif %}
+        {% if results[key] == "Flyby" or results[key] == "flyby" %} (accelerates as much as possible){% endif %}
+
+        <br>
+      {% endfor %}
+
+      <br>This page will get updated soon.<br>
+    </strong>
   </div>
   <br><br><br>
   {% for result in results %}
