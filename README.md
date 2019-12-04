@@ -2,12 +2,9 @@
 
 **Roster/Roles**
 - Elizabeth Doss
-<<<<<<< HEAD
   - Handle API requests cleanly
-=======
   - Connect frontend/backend
   - Write methods that can access each API and return the desired information
->>>>>>> search-dev
 - Yevgeniy Gorbachev
   - Handle the backend
   - Handle caching in database
@@ -24,11 +21,8 @@
   - Styling with Bootstrap
 
 ## Website Description
-<<<<<<< HEAD
+
 Data is fetched from the [Wolfram|Alpha API](https://docs.google.com/document/d/1GLX_8-HKjzI7kHLleQikTbWZ0orXhYVnabveE6T6J8M), [Wikipedia API](https://docs.google.com/document/d/1KNf_h_Rysiftc88uZNZO4LMpAyQprUTSj-eg5CMz9a8), and the [NASA Exoplanet API](https://docs.google.com/document/d/1J5PAzkRvPBrzud4jhXBX3yZZtMhlTx1KmLQezlLszEk).
-=======
-Data is fetched from the [Wikipedia API](https://www.mediawiki.org/wiki/API:Main_page), the [NASA Exoplanet API](https://exoplanetarchive.ipac.caltech.edu/docs/program_interfaces.html), and the [Wolfram|Alpha API](http://products.wolframalpha.com/api/).
->>>>>>> search-dev
 
 This website will (hopefully) provide information and answer questions the visitor may have regarding spacecraft, engines, space travel, exoplanets, etc. A search query is taken in from the user. The website parses the query for keywords, then parses the three APIs as appropriate for information relating to the search, and feeding it back to the user. Searches not containing keywords or erroneous queries will error out. 
 
@@ -38,9 +32,6 @@ Something like “how long to reach {{exoplanet}} with SpaceX Falcon 9” will w
   - Search Wikipedia API for the engine/rocket
   - Use the data gathered from the two above APIs to send an equation to Wolfram|Alpha
   - Return the result.
-<<<<<<< HEAD
-  
-Meanwhile, a query like “stat[istic]s for {planet, rocket engine}” will just get a result from the exoplanets API or Wikipedia API respectively. 
 
 ## Instructions for running this project
 
