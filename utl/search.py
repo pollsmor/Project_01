@@ -5,8 +5,8 @@
 
 
 import re
-from api_bus import wolfram, wikipedia, exoplanets, QueryFailure
-from cache import search as cachesearch, insert
+from utl.api_bus import wolfram, wikipedia, exoplanets, QueryFailure
+from utl.cache import search as cachesearch, insert
 
 #included separately due to frequency of use and modification
 planet_pattern = '[a-z]+(\-[0-9]+ ?([a-z][^a-z])?)?'
@@ -20,11 +20,11 @@ query_patterns = {
         re.IGNORECASE),
     'destination':re.compile('to (reach |flyby |(get|fly) to )?%s' % planet_pattern,
         re.IGNORECASE),
-    'method':re.compile('to (reach|flyby|(get|fly) to)', 
+    'method':re.compile('to (reach|flyby|(get|fly) to)',
         re.IGNORECASE),
-    'origin':re.compile('from %s' % planet_pattern, 
+    'origin':re.compile('from %s' % planet_pattern,
         re.IGNORECASE),
-    'engine':re.compile('(using|with) %s' % rocket_pattern, 
+    'engine':re.compile('(using|with) %s' % rocket_pattern,
         re.IGNORECASE),
     'fuel':re.compile('(and|using) [0-9]*.?[0-9]+( ?kg| kilograms| tons) of fuel',
         re.IGNORECASE),
@@ -33,7 +33,7 @@ query_patterns = {
 }
 #reduces a query parameter to raw content using the regular expression and the given function
 reductions = {
-    'method':(re.compile('(reach|flyby|(get|fly) to)$'), 
+    'method':(re.compile('(reach|flyby|(get|fly) to)$'),
         lambda s, m: s if s == 'flyby' else 'reach'),
     'destination':(re.compile('( %s)$' % planet_pattern, re.IGNORECASE),
         lambda s, m: s[1:-1]),
@@ -68,7 +68,7 @@ def search(query):
     result = cachesearch(query)
     if type(result) != dict:
         return result
-    
+
     # uses APIs to find data not found in cache
     if not result['engine']:
         try:
@@ -113,7 +113,7 @@ def search(query):
             end=result['engine']['mass'] + 10,
             time=query['time']
         )
-    
+
     try:
         query['result'] = wolfram(expr)
         return query
