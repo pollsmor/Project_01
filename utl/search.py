@@ -112,7 +112,6 @@ def dict_print(d):
     print('}')
 
 test_queries = [
-<<<<<<< HEAD
     "how long to reach kepler-10 c using merlin 1d and 1000kg of fuel",
     "how long to get to kepler-10 d using RS-25 and 1000.2kg of fuel",
     "how much fuel to flyby kepler-10 d using RS-25 in 10 years",
@@ -124,9 +123,3 @@ for query in test_queries:
         dict_print(search(query))
     except BadQuery as badness:
         print(badness)
-=======
-    "how long to reach kepler-10c using merlin 1d and 1000kg of fuel",
-    "how long to get to kepler-10d using RS-25 and 1000.2kg of fuel",
-    "how much fuel to flyby kepler-10d using RS-25 in 10 years"
-]
->>>>>>> bd7d754ed357f1393baf41f03ca3b03651af1763
