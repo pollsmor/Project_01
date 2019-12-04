@@ -42,9 +42,9 @@ reductions = {
     'engine':(re.compile('( %s)$' % rocket_pattern, re.IGNORECASE),
         lambda s, m: s[1:]),
     'fuel':(re.compile('[0-9]*.?[0-9]+'),
-        lambda f, m: float(f) * 1000 if 'tons' in m else 1),
+        lambda f, m: float(f) * (1000 if 'tons' in m else 1)),
     'time':(re.compile('[0-9]+'),
-        lambda i, m: float(i) * 1000 if 'millenia' in m else 1)
+        lambda i, m: float(i) * (1000 if 'millenia' in m else 1))
 }
 # mathematical expressions to send to Wolfram|Alpha
 expressions = {
