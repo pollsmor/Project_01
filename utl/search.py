@@ -6,7 +6,7 @@
 
 import re
 from api_bus import wolfram, wikipedia, exoplanets, QueryFailure
-from cache import search as cachesearch, store
+from cache import search as cachesearch, insert
 
 #included separately due to frequency of use and modification
 planet_pattern = '[a-z]+(\-[0-9]+ ?([a-z][^a-z])?)?'
@@ -48,13 +48,13 @@ reductions = {
 }
 # mathematical expressions to send to Wolfram|Alpha
 expressions = {
-    'distance':'Sqrt{{{dist1}^2 + {dist2}^2 - 2({dist1})({dist2})(Sin{{{ra1} degrees}}Sin{{{ra2} degrees}}Cos{{{decdiff} degrees}} + Cos{{{ra1} degrees}}Cos{{{ra2} degrees}})}}',
+    'distance':'Sqrt{{ {dist1}^2 + {dist2}^2 - 2*{dist1}*{dist2}Sin{{{ra1} degrees}}Sin{{{ra2} degrees}}Cos{{{decdiff} degrees}} + Cos{{{ra1} degrees}}Cos{{{ra2} degrees}} }}',
     'reach': {
-        'fuel':'{end}*Exp{{(2*{dist})/({exh}*{time})}}',
-        'time':'(2*{dist})/({exh}*Ln{{({start})/({end})}})'
+        'fuel':'{end}*Exp{{(2*({dist})/({exh}*{time}))}}',
+        'time':'2*({dist})/({exh}*Ln{{({start})/({end})}})'
     },
     'flyby': {
-        'fuel':'{end}*Exp{{({dist})/({exh}*{time})}}',
+        'fuel':'{end}*Exp{{(({dist})/({exh}*{time}))}}',
         'time':'({dist})/({exh}*Ln{{({start})/({end})}})'
     }
 }
@@ -73,6 +73,7 @@ def search(query):
         try:
             # print('Sending query to Wikipedia: %s' % query['engine'])
             result['engine'] = wikipedia(query['engine'])
+            insert(table='engines', values=result['engine'])
             # print('Result from Wikipedia: %s' % result['engine'])
         except QueryFailure as qf:
             raise
@@ -80,6 +81,7 @@ def search(query):
         try:
             # print('Sending query to NASA EXO: %s' % query['origin'])
             result['origin'] = exoplanets(query['origin'])
+            insert(table='planets', values=result['origin'])
             # print('Result from EXO: %s' % result['origin'])
         except QueryFailure as qf:
             raise
@@ -87,6 +89,7 @@ def search(query):
         try:
             # print('Sending query to NASA EXO: %s' % query['destination'])
             result['destination'] = exoplanets(query['destination'])
+            insert(table='planets', values=result['destination'])
             # print('Result from EXO: %s' % result['destination']) 
         except QueryFailure as qf:
             raise
@@ -169,8 +172,11 @@ def _parse(query):
 
 test_queries = [
     'how long to reach Kepler-74 b using merlin 1d and 1000 tons of fuel',
-    'how much fuel to reach Kepler-74 b using merlin 1d in 100 years',
-    'how much fuel to reach Kepler-74 b from Kepler-70 a using rocketdyne F-1 in 1000 years'
+    'how much fuel to reach Kepler-74 b using merlin 1d in 10000000000000 years',
+    'how much fuel to reach Kepler-74 b from Kepler-70 a using rocketdyne F-1 in 100000000000000 years',
+    'how long to flyby Kepler-74 b using merlin 1d and 1000 tons of fuel',
+    'how much fuel to flyby Kepler-74 b using merlin 1d in 10000000000000 years',
+    'how much fuel to reach Kepler-74 b from Kepler-70 a using rocketdyne F-1 in 100000000000000 years'
 ]
 
 for query in test_queries:

@@ -67,14 +67,6 @@ def search(query): # searches db for query
         result['engine'] = search_item(table='engines',name=query['engine'])
         return result
 
-
-def store(results):
-    insert(table='queries', values=results['results'])
-    insert(table='engines', values=results['engine'])
-    insert(table='planets', values=results['origin'])
-    insert(table='planets', values=results['destination'])
-
-
 def insert(*args, **kwargs):
     db = sqlite3.connect(__dbfile__)
     table = kwargs['table']

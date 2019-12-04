@@ -48,14 +48,7 @@ def substr(match, string): # substring using span in Match object
 def wolfram(query):
     info = get_equation_result(query)
     response = info['queryresult']['pods'][1]['subpods'][0]['plaintext']
-    if ('...' in response):
-        dec = response[:response.find('...')]
-        expon = response[response.find('^')+1:]
-        response = float(dec) * 10 ** float(expon)
-        print(response)
-    if any(c.isalpha() for c in response):
-        raise QueryFailure('Bad Request to Wolfram\'s API, Input Equation to Return A Number')
-    return float(response)
+    return response
 
 
 #-----------------------Wikipedia Functions---------------------------
@@ -178,7 +171,7 @@ def exoplanets(query):
 #print("\n")
 #print(wolfram('why'))
 #print(wikipedia("merlin"))
-print(wikipedia("Rocketdyne F-1"))
+#print(wikipedia("Rocketdyne F-1"))
 #print(wikipedia("RS-25"))
 #print(wikipedia("wow"))
 #print("\n")
