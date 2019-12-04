@@ -76,5 +76,3 @@ After installing the required dependencies, all you need to do to run the progra
 python3 app.py
 ```
 *Again, remove the 3 after the "python" if necessary.*
-=======
->>>>>>> search-dev
