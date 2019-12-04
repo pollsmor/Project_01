@@ -172,3 +172,21 @@ yevgeniyG -- 2019-12-02 14:39
   
 kevinL -- 2019-12-02 20:30
   - Docstrings galore (beware merge conflicts)
+
+emoryW -- 2019-12-03 08:36
+  - Changed size of footnote text
+  - Preparing to actually put answers into template
+  - Got rid of explanation.html
+
+emoryW -- 2019-12-03 18:23
+  - Changed background color to starry image
+
+kevinL -- 2019-12-03 19:30
+  - Added a graceful mechanism of handling API keys
+
+yevgeniyG -- 2019-12-03 20:25
+  - All expressions validated
+
+emoryW -- 2019-12-03 21:41
+  - Changed placeholder query
+  - Added new catch in html for exceptions
