@@ -12,6 +12,7 @@ from utl.cache import search as cachesearch, insert
 planet_pattern = '[a-z]+(\-[0-9]+ ?([a-z][^a-z])?)?'
 rocket_pattern = '(Merlin |Rocketdyne |BMW |S[0-9]\.)?[\-a-zA-Z0-9]+'
 parsec = int(3.086 * (10 ** 13))
+year = 31622400
 # maps query parameters to regular expessions
 query_patterns = {
     'travel time':re.compile('(time|how long)',
@@ -102,14 +103,14 @@ def search(query):
     if query['type'] == 'travel time':
         expr = expressions[query['method']]['time'].format(
             dist=distance,
-            exh=result['engine']['exhaust'],
+            exh=result['engine']['exhaust'] * year,
             end=result['engine']['mass'] + 10,
             start = query['fuel'] + result['engine']['mass'] + 10
         )
     elif query['type'] == 'fuel mass':
         expr = expressions[query['method']]['fuel'].format(
             dist=distance,
-            exh=result['engine']['exhaust'],
+            exh=result['engine']['exhaust'] * year,
             end=result['engine']['mass'] + 10,
             time=query['time']
         )
