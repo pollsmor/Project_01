@@ -37,6 +37,7 @@ def searchResults():
     except:
         flash("Issue with query. Please try again.")
         return redirect(url_for('index'))
-    return render_template('results.html', query = query, results = results)
+    answer = results['result']
+    return render_template('results.html', query = query, results = results, answer = answer)
 
 app.run(debug=True)
