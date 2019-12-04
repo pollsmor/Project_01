@@ -39,7 +39,7 @@ def get_equation_result(query):
     info = get_json(url)
     if info['queryresult']['success'] == True:
         return info
-    raise QueryFailure('Request to Wolfram\'s API Unsuccessful, Input Proper Query') 
+    raise QueryFailure('Wolfram|Alpha: malformed query') 
 
 def substr(match, string): # substring using span in Match object
     return string[match.span()[0]:match.span()[1]]
@@ -72,25 +72,23 @@ def wikipedia(query):
     imp_info = {}
 
     infobox = info.find('infobox')
-    #print(infobox)
     query = query.replace('rocket', '').strip().lower()
     if query.find(' ') != -1:                       #create a list of all the words in the query if more than 1
         queryList = list(query.partition(' '))
         queryList.remove(' ')
-        #print(queryList)
         found = False
         while found == False and infobox != -1:
             for i in queryList: 
                 if i in info[infobox:infobox+100].lower():
                     found = True
-                    print('found')
+                    
                     break
             if found == False:
                 info = info[infobox+1:]
                 infobox = info.find('infobox')
-                print('searching')
+                
         if infobox == -1:                           #throws error if the page does not have an infobox with the given query
-            raise QueryFailure('Incompatible Information to Wikipedia\'s API')
+            raise QueryFailure('Wikipedia: rocket information not found')
     else:
         while infobox != -1:
             if query not in info[infobox:infobox+100].lower():
@@ -99,13 +97,12 @@ def wikipedia(query):
             else:
                 break
         if infobox == -1:
-            raise QueryFailure('Incompatible Information to Wikipedia\'s API')
+            raise QueryFailure('Wikipedia: rocket information not found')
 
     #the query is found inside an infobox that should have all necessary information
 
     infobox += 37
     name_str = info[infobox:infobox+50]             #add arbitrary large number for dif name lengths
-    #print(name_str)
     if '<' in name_str:
         name_str = name_str.partition('<')[0]
     imp_info['name'] = name_str
@@ -150,11 +147,10 @@ def wikipedia(query):
 #-----------------------Exoplanets Functions---------------------------
 def exoplanets(query):
     url = EXOPLANETS.get_url(query)
-    #print(url)
     info = get_json(url)
 
     if (len(info) <= 0): #no search results found
-        raise QueryFailure('Bad Request to NASA Exoplanet\'s API failed') 
+        raise QueryFailure('NASA Exoplanet Archive: exoplanet not found') 
 
     result = info[0]
 
@@ -163,24 +159,4 @@ def exoplanets(query):
     output['ra'] = result['ra']
     output['dec'] = result['dec']
     output['distance'] = result['st_dist']
-    #print(output)
     return output
-
-##Tests
-#print(wolfram('2^4'))
-#print("\n")
-#print(wolfram('why'))
-#print(wikipedia("merlin"))
-#print(wikipedia("Rocketdyne F-1"))
-#print(wikipedia("RS-25"))
-#print(wikipedia("wow"))
-#print("\n")
-#print(exoplanets('Kepler-74'))
-#print(exoplanets("Proxima"))
-#print(exoplanets('hi there'))
-
-
-##Things to return
-#wolfram alpha: equation result
-#nasa exoplanet: name, ra, dec, distance
-#wikipedia: thrust - Thrust (vac.), impulse - Isp (vac.), velocity - Isp (vac.) (), mass - Dry weight, propellant - Propellant

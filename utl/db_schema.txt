@@ -1,6 +1,4 @@
 CREATE TABLE IF NOT EXISTS engines (name TEXT PRIMARY KEY, mass NUMERIC, impulse NUMERIC, exhaust NUMERIC, thrust NUMERIC, propellant TEXT);
 CREATE TABLE IF NOT EXISTS planets (name TEXT PRIMARY KEY, distance NUMERIC, ra NUMERIC, dec NUMERIC);
-CREATE TABLE IF NOT EXISTS queries (origin TEXT, method TEXT, destination TEXT, engine TEXT, fuel NUMERIC, time NUMERIC);
 DROP TABLE engines;
 DROP TABLE planets;
-DROP TABLE queries;
