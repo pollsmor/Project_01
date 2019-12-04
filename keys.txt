@@ -1,1 +1,1 @@
-WFA_key = ""
+WFA_key = "P4747E-2545R4KKGK"

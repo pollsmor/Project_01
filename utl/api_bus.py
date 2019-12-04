@@ -5,6 +5,7 @@ import urllib.request
 from urllib.parse import quote
 import json
 import re
+from keys import WFAkey
 
 class QueryFailure(Exception):
     pass
@@ -20,7 +21,7 @@ class API(object):
         query = quote(query)
         return self.url.format(_key = self.key, query = query)
 
-WOLFRAM = API('P4747E-2545R4KKGK','http://api.wolframalpha.com/v2/query?appid={_key}&input={query}&output=json')
+WOLFRAM = API(WFAkey,'http://api.wolframalpha.com/v2/query?appid={_key}&input={query}&output=json')
 WIKIPEDIA_SEARCH = API('','https://en.wikipedia.org/w/api.php?action=query&format=json&prop=categories&list=search&continue=-||categories&srsearch={query}&sroffset=0')
 WIKIPEDIA = API('','https://en.wikipedia.org/w/api.php?action=parse&format=json&pageid={query}')
 WIKIPEDIA_PAGE_INFO = API('','https://en.wikipedia.org/w/api.php?action=parse&format=json&pageid={query}')
@@ -39,7 +40,7 @@ def get_equation_result(query):
     info = get_json(url)
     if info['queryresult']['success'] == True:
         return info
-    raise QueryFailure('Request to Wolfram\'s API Unsuccessful, Input Proper Query') 
+    raise QueryFailure('Request to Wolfram\'s API Unsuccessful, Input Proper Query')
 
 def substr(match, string): # substring using span in Match object
     return string[match.span()[0]:match.span()[1]]
@@ -87,7 +88,7 @@ def wikipedia(query):
         #print(queryList)
         found = False
         while found == False and infobox != -1:
-            for i in queryList: 
+            for i in queryList:
                 if i in info[infobox:infobox+100].lower():
                     found = True
                     print('found')
@@ -116,11 +117,11 @@ def wikipedia(query):
     if '<' in name_str:
         name_str = name_str.partition('<')[0]
     imp_info['name'] = name_str
-    
+
 
     ##Thrust (vac.)
     thrustVac = info.find("Thrust (vac.)") + 22
-    thrustVac_str = info[thrustVac:thrustVac+30]    
+    thrustVac_str = info[thrustVac:thrustVac+30]
     if '&' in thrustVac_str:
         thrustVac_str = thrustVac_str.partition('&')[0]
     imp_info['thrust'] = thrustVac_str
@@ -164,7 +165,7 @@ def exoplanets(query):
     info = get_json(url)
 
     if (len(info) <= 0): #no search results found
-        raise QueryFailure('Bad Request to NASA Exoplanet\'s API failed') 
+        raise QueryFailure('Bad Request to NASA Exoplanet\'s API failed')
 
     result = info[0]
 
@@ -177,7 +178,7 @@ def exoplanets(query):
     return output
 
 ##Tests
-print(wolfram('2^4'))
+#print(wolfram('2^4'))
 #print("\n")
 #print(wolfram('why'))
 #print(wikipedia("merlin"))
